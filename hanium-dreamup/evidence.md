@@ -34,6 +34,12 @@
 | B-15 | 정기 수집은 GitHub Actions 일정(기상 3시간, 관광·DUR 주 1회, 부동산 월초)이 `publish-dataset.yml`을 호출하는 방식이며 레거시 게시 스크립트로 동작한다. 대기질은 수동 실행만 남아 있다. | [게시 워크플로](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/.github/workflows/publish-dataset.yml), [기상 일정](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/.github/workflows/scheduled-weather.yml) |
 | B-16 | LLM 기반 스키마 매핑과 DVC는 코드에 없다. 버전 관리는 웨어하우스 스냅샷 revision과 명세 개정 이력으로 한다. | [웨어하우스 카탈로그](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/warehouse/catalog.py), [개정 이력](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/service/revisions.py) |
 | B-17 | API 계약 버전은 1.123.0이다. CI는 ruff·mypy·pytest(Python 3.10~3.13)를 돌린다. | [계약 버전](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/service/_contract_operations.py), [CI](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/.github/workflows/ci.yml) |
+| B-18 | 비동기 작업 상태는 queued → running → succeeded·failed·cancelled이고 취소는 단계 경계에서만 반영한다. 기본 제한은 동시 실행 2건, 사용자별 진행 2건, 대기 10건, 실행 시간 6시간이다. | [빌드 상태 문서](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/docs/BUILD_STATE.md), [실행 제한](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/service/build_limits.py) |
+| B-19 | HTTP API는 77개 연산이며 인증은 `X-API-Key` 또는 OIDC Bearer다. `/healthz`·`/readyz`만 인증 없이 응답한다. | [API 계약](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/contract/builder-api.yaml), [연산 목록](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/service/_contract_operations.py), [계약 문서](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/docs/API_CONTRACT.md) |
+| B-20 | 테스트 파일은 285개다(단위 271, 통합 7, 파이프라인 6, 엔진 동등성 1). 워크플로는 CI·보안·이미지·계약 호환·정기 수집 등으로 나뉜다. | [tests](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/tests), [workflows](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/.github/workflows) |
+| B-21 | 배포는 Docker 이미지이고 설정은 환경변수로 주입한다. 인증 없이는 기동하지 않으며 자격 증명은 마스터 키로 암호화한다. | [배포 문서](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/docs/deployment.md) |
+| B-22 | 스냅샷은 임시 위치에 쓴 뒤 검증을 거쳐 옮기고 읽기 전용으로 만든다. 저장된 분석 등이 붙잡은 스냅샷은 정리하지 않는다. | [커밋](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/warehouse/materialize.py), [정리](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/warehouse/gc.py), [배치](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/warehouse/layout.py) |
+| B-23 | Silver 정규화 순서는 read_as → null_tokens → coalesce → rename → zfill → casts → derived다. URL 수집은 연결 5초, 읽기 15초, 리다이렉트 5회, 20MiB로 제한한다. | [정규화](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/stages/silver/normalize.py), [URL 수집](https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/src/kpubdata_builder/ingestion/url_fetch.py) |
 | S-01 | 메뉴는 홈 / 데이터(카탈로그·테이블) / 분석(SQL 작업 공간·저장된 분석·작업대·리포트) / 운영(갱신 이력·품질·모니터링·관리) / 연결·설정이다. 이전 경로는 새 경로로 이동한다. | [레이아웃](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/app/Layout.tsx), [라우터](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/app/router.tsx), [정보 구조](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/docs/INFORMATION_ARCHITECTURE.md) |
 | S-02 | 홈은 조치가 필요한 테이블, 최근 스냅샷, 최근 분석, 연결 문제를 보여 주고 첫 실행에는 체크리스트를 보여 준다. | [HomePage](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/pages/HomePage.tsx) |
 | S-03 | 모니터링은 탭 없는 한 화면이며 30초 간격으로 조회하고 탭이 숨겨지면 멈춘다. | [MonitoringPage](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/pages/MonitoringPage.tsx) |
@@ -46,19 +52,22 @@
 | S-10 | API 클라이언트는 30초 제한과 최대 2회 재시도를 쓰고, 401에서는 토큰을 갱신해 한 번 다시 보낸다. 오프라인 모드는 없다. 최소 Builder 계약 버전은 1.96.0이다. | [builderApi](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/shared/lib/builderApi.ts), [인증 초기화](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/features/auth/init.ts) |
 | S-11 | 스택: React 19.3, TypeScript 6, Vite 8, React Router 7, Zustand 5, Tailwind CSS 4, Zod 4, i18next(한국어·영어), keycloak-js, Vitest, Playwright. | [package.json](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/package.json) |
 | S-12 | LLM 키는 기본적으로 메모리에만 두고, 사용자가 선택하면 localStorage에 저장한다. 전송 전에 비밀값을 자리표시자로 바꾼다. | [설정](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/features/assistant/config.ts), [비밀값 제거](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/features/assistant/scrub.ts) |
+| S-13 | 단위 테스트 파일 308개, E2E 스펙 26개, 화면 기준 이미지 15장이다. 커버리지 기준은 구문 84%, 분기 75%, 함수 85%, 줄 86%다. | [vitest 설정](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/vitest.config.ts), [playwright 설정](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/playwright.config.ts), [화면 기준 테스트](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/e2e/visual.spec.ts) |
+| S-14 | 기능 폴더와 화면 파일의 구성, 화면별로 호출하는 Builder API. | [features](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/features), [pages](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/pages), [builderApi](https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/src/shared/lib/builderApi.ts) |
 
 ## 문서별 근거
 
 | 문서 위치 | 근거 |
 |---|---|
 | 결과보고서 Ⅰ. 개요, Ⅱ-1 구성도 / 설계서 서비스 구성도 | B-01, B-02, S-01 |
-| 결과보고서 Ⅱ-2 기능, Ⅱ-3 적용 기술 / 설계서 요구사항 정의서 | B-04, B-05, B-09~B-16, S-01~S-10 |
-| 결과보고서 Ⅱ-4 개발 환경 / 설계서 프로그램 목록 | B-17, S-11 |
+| 결과보고서 Ⅱ-2 기능, Ⅱ-3 적용 기술 / 설계서 요구사항 정의서 | B-04, B-05, B-09~B-16, B-18, B-22, B-23, S-01~S-12 |
+| 결과보고서 Ⅱ-4 개발 환경 / 설계서 프로그램 목록 | B-17, S-11, S-14 |
+| 결과보고서 Ⅲ-3 테스트 수행 / 설계서 테스트 설계, CI·배포 구성 | B-20, B-21, S-13 |
 | 결과보고서 Ⅲ-3 개발 측면 문제점 | B-02, B-03, B-07, B-08, S-01, S-06 |
-| 설계서 서비스 흐름도, 기능 처리도 | B-03, S-08, S-09, S-10 |
+| 설계서 서비스 흐름도, 기능 처리도, 인터페이스 정의서 | B-03, B-18, B-19, S-08, S-09, S-10, S-14 |
 | 설계서 메뉴 구성도, 화면 설계서 | S-01~S-09, S-12 |
 | 설계서 엔티티 관계도, 테이블 정의서 | B-04, B-06, B-08 |
-| 설계서 알고리즘 명세서, 데이터 수집처리 정의서 | B-01, B-02, B-07, B-10, B-11, B-14 |
+| 설계서 알고리즘 명세서, 데이터 수집처리 정의서 | B-01, B-02, B-07, B-09~B-15, B-22, B-23, S-12 |
 | 설계서 핵심 소스코드 | B-04, B-07, S-06 |
 | 설계서 시장 동향의 시장 규모·OECD 순위 | 코드 밖 자료. 제출 전 원문 확인 필요 |
 

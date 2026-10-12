@@ -7,34 +7,8 @@ BUILDER = "https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1f
 STUDIO = "https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401"
 
 
-def ul(items):
-    return "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>"
-
-
-def table(head, rows, cls="", widths=None):
-    ths = ""
-    for i, h in enumerate(head):
-        w = f' style="width:{widths[i]}"' if widths and widths[i] else ""
-        ths += f"<th{w}>{h}</th>"
-    body = ""
-    for r in rows:
-        body += "<tr>" + "".join(c if c.startswith("<td") else f"<td>{c}</td>" for c in r) + "</tr>"
-    return f'<div class="tablewrap"><table class="{cls}"><tr>{ths}</tr>{body}</table></div>'
-
-
-def c(text, rowspan=None):
-    rs = f' rowspan="{rowspan}"' if rowspan else ""
-    return f'<td class="c"{rs}>{text}</td>'
-
-
-def fig(name, alt, cls=""):
-    return f'<div class="figure {cls}"><img src="figures/{name}" alt="{alt}"></div>'
-
-
-def sheet(title, body, brk=True):
-    b = " break" if brk else ""
-    return f'<section class="sheet{b}">\n<h2 class="bar">{title}</h2>\n{body}\n</section>\n'
-
+from docgen import c, fig, sheet, table, ul
+import design_detail as detail
 
 parts = []
 
@@ -221,6 +195,8 @@ parts.append(sheet("서비스 흐름도", fig("flow-service.svg", "서비스 흐
     "⑥ 결과 확인 — 실행 상세에서 단계별 상태·품질·이벤트 확인, 테이블 스냅샷 활용",
 ])))
 
+parts += detail.interface_sheets()
+
 # ---------------------------------------------------------------- 메뉴 구성도
 parts.append(sheet("메뉴 구성도", fig("menu.svg", "메뉴 구성도", "m70") + table(["그룹", "메뉴", "경로", "설명"], [
     [c("-"), "홈", "<code>/</code>", "조치가 필요한 테이블과 최근 변경"],
@@ -311,7 +287,8 @@ for i, (name, imgs, purpose, elements, states) in enumerate(SCREENS, 1):
     info = ('<table class="info small">'
             f"<tr><th>화면 개요</th><td>{purpose}</td></tr>"
             f"<tr><th>주요 UI 구성요소</th><td>{ul(elements)}</td></tr>"
-            f"<tr><th>상태·상호작용</th><td>{ul(states)}</td></tr></table>")
+            f"<tr><th>상태·상호작용</th><td>{ul(states)}</td></tr>"
+            f"<tr><th>관련 API</th><td><code>{detail.SCREEN_API[name]}</code></td></tr></table>")
     parts.append(sheet(f"화면 설계서 — {name} ({i}/{n})", shots + info))
 
 # ---------------------------------------------------------------- 엔티티 관계도
@@ -361,6 +338,8 @@ parts.append(sheet("기능 처리도 - Ask KPubData 응답 처리", fig("flow-as
     "LLM 키는 사용자가 직접 입력(BYOK)하며 기본적으로 메모리에만 보관",
 ])))
 
+parts += detail.state_sheets()
+
 # ---------------------------------------------------------------- 알고리즘 명세서
 parts.append(sheet("알고리즘 명세서", fig("algorithm.svg", "run_build 알고리즘", "tall")))
 parts.append(sheet("알고리즘 명세서", ul([
@@ -383,6 +362,8 @@ parts.append(sheet("알고리즘 명세서", ul([
     "파이프라인에 들어간 뒤 취소된 실행은 <code>status=cancelled</code>, <code>partial=true</code>로 Manifest를 남김",
 ])))
 
+parts += detail.algorithm_detail_sheets()
+
 # ---------------------------------------------------------------- 데이터 수집처리 정의서
 parts.append(sheet("데이터 수집처리 정의서", "<p>○ Medallion 구조 기반 수집·처리 — Bronze / Silver / Gold 3단계 + Export</p>" + fig("pipeline.svg", "데이터 수집·처리 흐름", "low") + table(["단계", "처리 내용", "사용 기술", "입력 → 출력"], [
     [c("Bronze<br>(원천 수집)"), "공공 API·업로드 파일·URL의 원본을 그대로 수집. 수집 시각·파라미터·건수·체크섬 기록. 파라미터 조합별 체크포인트", "kpubdata, URL 수집기", "외부 원본 → <code>bronze/{source}/raw_records.jsonl</code>, <code>metadata.json</code>"],
@@ -395,124 +376,11 @@ parts.append(sheet("데이터 수집처리 정의서", "<p>○ Medallion 구조 
     "Silver는 행과 컬럼을 모두 보존하고, 선택과 필터는 Gold에서만 수행",
 ])))
 
-# ---------------------------------------------------------------- 프로그램 목록
-parts.append(sheet("프로그램 목록 - KPubData Builder", table(["기능ID", "패키지·모듈", "역할"], [
-    [c("A02_B01~02"), "<code>spec/</code>", "BuildSpec 모델, 로더, 검증기, 스냅샷, 지문"],
-    [c("A02·A03"), "<code>pipeline/</code>", "오케스트레이터(<code>run_build</code>), 실행 문맥, 취소, 미리보기, 내보내기"],
-    [c("A01_B01~02"), "<code>stages/bronze/</code>, <code>ingestion/</code>", "소스 수집, 체크포인트, 파일·URL 읽기"],
-    [c("A02_B05~06"), "<code>stages/silver/</code>, <code>quality/</code>, <code>tabular/</code>", "DuckDB 정규화, 검증, 통계, 개인정보 검사, 스키마 변화 감지, 품질 평가"],
-    [c("A02_B07"), "<code>stages/gold/</code>", "선택, 마스킹, 분할, 조인, 카드"],
-    [c("A03_B02"), "<code>exporters/</code>", "csv, jsonl, parquet, markdown, huggingface, kaggle"],
-    [c("A03_B05"), "<code>publishers/</code>", "local, huggingface, kaggle"],
-    [c("A03_B03"), "<code>manifest/</code>, <code>events/</code>", "Manifest 모델·기록, 실행 이벤트와 종료 기록"],
-    [c("A03_B04"), "<code>warehouse/</code>", "테이블 카탈로그, 스냅샷 커밋·정리·백업"],
-    [c("A06_B03"), "<code>query/</code>", "읽기 전용 SQL 검사, 격리 실행, 집계, 프로파일"],
-    [c("A04·A08"), "<code>service/</code>", "HTTP 서비스, 경로, 인증, 비동기 작업, 게시, 모니터링, 관리"],
-    [c("A06_B04"), "<code>credentials/</code>, <code>uploads/</code>", "자격 증명 암호화 저장, 업로드 파일 저장"],
-    [c("-"), "<code>store/</code>", "빌드 인덱스, 상태 목록, 백업"],
-    [c("A01_B04"), "<code>agent/</code>, <code>verify/</code>", "신규 데이터셋 탐색·승인 확인, 명세 실검증"],
-    [c("-"), "<code>cli.py</code>", "명령줄 진입점 (validate, preview, build, publish, serve 등)"],
-], "small", ["24mm", "62mm", None]) + "<h3>주요 CLI 명령</h3>" + table(["명령", "용도"], [
-    ["<code>validate</code> · <code>preview</code> · <code>build</code>", "명세 검증, 저장 없는 미리보기, 파이프라인 실행"],
-    ["<code>publish</code>", "산출물을 로컬 또는 원격 대상으로 게시"],
-    ["<code>serve</code>", "Builder HTTP 서비스 실행"],
-    ["<code>rebuild-index</code> · <code>backup</code> · <code>restore</code>", "인덱스 재구성, 상태 백업과 복원"],
-    ["<code>warehouse-gc</code> · <code>warehouse-backup</code>", "스냅샷 정리와 백업"],
-    ["<code>prune-runs</code> · <code>prune-cancelled</code>", "보존 기간이 지난 실행 정리"],
-], "small", ["70mm", None])))
-parts.append(sheet("프로그램 목록 - KPubData Studio", table(["기능ID", "디렉터리", "역할"], [
-    [c("A04_B01"), "<code>features/home</code>, <code>onboarding</code>", "홈 데이터, 첫 실행 체크리스트"],
-    [c("A04_B02"), "<code>features/discover</code>, <code>add-data</code>, <code>preview</code>, <code>validation</code>", "카탈로그, 테이블 만들기 마법사, 미리보기·검증 클라이언트"],
-    [c("A04_B02"), "<code>features/build-spec</code>", "BuildSpec 변환, YAML, 초안, 비교, 개정 이력"],
-    [c("A04_B03"), "<code>features/datasets</code>, <code>data-table</code>", "테이블 목록·상세, 공통 표, 행 조회"],
-    [c("A04_B04"), "<code>features/sql</code>, <code>charts</code>, <code>export</code>", "SQL 실행, 저장된 분석, 집계 차트, 결과 내보내기"],
-    [c("A04_B05"), "<code>features/reports</code>, <code>workspace</code>", "리포트 저장·편집·내보내기, 최근 작업"],
-    [c("A04_B06"), "<code>features/runs</code>, <code>artifacts</code>, <code>publish</code>", "비동기 실행과 상태 조회, 산출물, 게시"],
-    [c("A04_B07"), "<code>features/provider</code>, <code>version-check</code>", "연결 관리, Builder 버전 비교"],
-    [c("A06_B02"), "<code>features/licence</code>", "이용 조건 요약"],
-    [c("A06_B04"), "<code>features/auth</code>", "Keycloak 연동, 토큰 갱신, 로그인 보호"],
-    [c("A07_B01"), "<code>features/assistant</code>", "Ask KPubData: 프롬프트, 구조 검증, 근거 대조, 동작, 비밀값 제거"],
-    [c("A08"), "<code>features/monitoring</code>, <code>quality</code>, <code>admin</code>", "모니터링, 품질 센터, 관리"],
-    [c("-"), "<code>shared/lib/builderApi.ts</code>", "Builder API 클라이언트. 모든 응답을 Zod 스키마로 검증"],
-    [c("-"), "<code>pages/</code>, <code>app/</code>", "화면 23종, 라우터, 공통 레이아웃"],
-], "small", ["22mm", "74mm", None]) + "<h3>개발 스택</h3>" + table(["구분", "내용"], [
-    [c("Builder"), "Python 3.10~3.13, DuckDB, Parquet(pyarrow), SQLite, sqlglot"],
-    [c("Studio"), "React 19, TypeScript 6, Vite 8, React Router 7, Zustand 5, Tailwind CSS 4, Zod 4, i18next (한국어·영어)"],
-    [c("인증"), "Keycloak (OIDC Authorization Code + PKCE), keycloak-js"],
-    [c("테스트"), "Builder: pytest, ruff, mypy / Studio: Vitest, Playwright, axe-core"],
-    [c("배포"), "Docker 이미지, GitHub Actions"],
-], "small", ["24mm", None])))
+parts += detail.collection_detail_sheets()
 
-# ---------------------------------------------------------------- 테이블 정의서
-parts.append(sheet("테이블 정의서 - BuildSpec", "<p>○ BuildSpec 필드 구조 (dataset_id / title / description / sources[] 는 필수)</p>" + table(["필수/선택", "필드명", "타입", "설명"], [
-    [c("필수"), "<code>dataset_id</code>", "string", "데이터셋 식별자"],
-    [c("필수"), "<code>title</code>", "string", "사람이 읽는 제목"],
-    [c("필수"), "<code>description</code>", "string", "목적과 데이터 설명"],
-    [c("필수"), "<code>sources[]</code>", "array&lt;SourceRef&gt;", "입력 소스 (1개 이상)"],
-    [c("선택"), "<code>exports[]</code>", "array&lt;ExportTarget&gt;", "내보내기 대상 (kind·output_path·options). 비워 두면 테이블 커밋까지만 수행"],
-    [c("선택"), "<code>splits</code>", "SplitSpec", "분할 정의 (mode: ratio | key, ratios, key, seed)"],
-    [c("선택"), "<code>quality</code>", "QualityPolicy", "품질 기준 (중복률, 결측률, 최소 행 수, 값 범위, 컬럼 비교)"],
-    [c("선택"), "<code>pii</code>", "PiiPolicy", "개인정보 검사 정책 (mode: block | warn | allow)"],
-    [c("선택"), "<code>composition</code>", "CompositionSpec", "두 소스를 조인해 하나의 Gold 생성"],
-    [c("선택"), "<code>license</code> · <code>license_name</code> · <code>license_link</code> · <code>attribution</code>", "string", "라이선스와 출처 표기. 게시할 때 license 필수"],
-    [c("선택"), "<code>publish</code>", "boolean", "실행 후 게시 여부 (기본 false)"],
-    [c("선택"), "<code>refresh_cadence</code>", "string", "갱신 주기 (ISO-8601 기간, 예: P1D). 갱신 지연 판정에 사용"],
-    [c("선택"), "<code>metadata</code>", "object", "산출물에 실을 임의 메타데이터"],
-], "small", ["18mm", "50mm", "36mm", None]) + ul(["※ DB 테이블이 아닌 실행 계약의 필드 구조를 테이블 정의서 형식으로 정리함 (출처: <code>spec/models.py</code>)"])))
-parts.append(sheet("테이블 정의서 - SourceRef", "<p>○ SourceRef 필드 구조 — BuildSpec의 sources[] 항목</p>" + table(["필드명", "타입", "설명"], [
-    ["<code>kind</code>", "string", "소스 종류: public_api(기본) | file | url"],
-    ["<code>provider</code> · <code>dataset</code>", "string", "kpubdata 제공 기관과 데이터셋 (public_api에서 필수)"],
-    ["<code>params</code> · <code>param_grid</code>", "object", "수집 파라미터, 조합별로 수집할 파라미터 축"],
-    ["<code>alias</code>", "string", "출력 키 이름. 조인에서 참조"],
-    ["<code>schema</code>", "SchemaContract", "정규화·검증 계약 (required, dtypes, casts, rename, derived, null_tokens, coalesce, zfill)"],
-    ["<code>gold</code>", "GoldSelection", "Gold에 남길 컬럼과 행 (select, filters, pii_columns)"],
-    ["<code>upload_id</code> · <code>format</code> · <code>encoding</code>", "string", "파일 소스: 업로드 식별자, 형식(csv·json·jsonl·parquet), 인코딩"],
-    ["<code>endpoint</code> · <code>method</code>", "string", "URL 소스: 주소(HTTPS), 메서드(GET만 허용)"],
-    ["<code>allow_empty</code>", "boolean", "0행 결과가 기존 테이블을 대체하도록 허용할지 여부"],
-], "small", ["58mm", "30mm", None]) + "<p>○ SchemaContract 적용 순서</p>" + ul([
-    "read_as → null_tokens → coalesce → rename → zfill → casts → derived",
-    "형 변환에서 값이 사라지면 오류로 처리하며, 선언하지 않은 변환은 수행하지 않음",
-]) + ul(["※ 출처: <code>spec/models.py</code>"])))
-
-parts.append(sheet("테이블 정의서 - BuildManifest", "<p>○ BuildManifest 필드 구조 — 파이프라인에 들어간 실행마다 1건 생성 (schema_version 1.0.0)</p>" + table(["필드명", "타입", "설명"], [
-    ["<code>build_id</code>", "string", "실행 식별자"],
-    ["<code>started_at</code> / <code>finished_at</code>", "datetime", "실행 시작·종료 시각"],
-    ["<code>status</code> · <code>partial</code>", "string · bool", "ok | failed | cancelled. partial은 취소된 실행에서만 true"],
-    ["<code>inputs</code> / <code>outputs</code>", "tuple&lt;string&gt;", "소스 출력 키 목록 / 생성된 산출물 경로 목록"],
-    ["<code>warnings</code> / <code>errors</code>", "tuple&lt;string&gt;", "경고 / 실패 메시지"],
-    ["<code>failures</code>", "tuple&lt;RunFailure&gt;", "실패 내역 (소스, 단계, 코드, 요약)"],
-    ["<code>row_counts</code>", "dict&lt;str,int&gt;", "소스·조인별 Silver 행 수"],
-    ["<code>schema_summaries</code>", "dict&lt;str,SchemaSummary&gt;", "소스별 스키마 요약"],
-    ["<code>provenance</code>", "tuple&lt;SourceProvenance&gt;", "소스별 수집 시각, 파라미터, 레코드 수, 체크섬"],
-    ["<code>quality_results</code>", "dict", "평가한 품질 검사 결과 (pass 포함)"],
-    ["<code>schema_drift</code>", "dict", "이전 실행 대비 스키마·행 수 변화"],
-    ["<code>gold_selection</code> · <code>pii_masking</code>", "dict", "Gold 선택 규칙과 행 수, 마스킹한 컬럼"],
-    ["<code>composition</code>", "CompositionProvenance", "조인 내역"],
-    ["<code>warehouse_failures</code>", "dict", "커밋에 실패한 테이블과 사유"],
-    ["<code>build_environment</code>", "BuildEnvironment", "Python·kpubdata·Builder 버전"],
-    ["<code>inputs_fingerprint</code>", "string | None", "입력 데이터 지문 (sha256:…)"],
-    ["<code>artifacts</code>", "dict", "Gold 디렉터리별 산출물 다이제스트"],
-    ["<code>created_by</code> · <code>retry_of</code>", "string | None", "요청자 표시 이름, 재시도 대상 실행"],
-], "small", ["52mm", "44mm", None]) + ul(["※ 출처: <code>manifest/models.py</code>"])))
-parts.append(sheet("테이블 정의서 - 저장 인덱스", "<p>○ builds 표 (SQLite 인덱스, <code>_builds.sqlite</code>)</p>" + table(["컬럼", "타입", "설명"], [
-    ["<code>run_id</code>", "TEXT PK", "실행 식별자"],
-    ["<code>status</code>", "TEXT NOT NULL", "ok | failed | cancelled (CHECK 제약)"],
-    ["<code>started_at</code> · <code>finished_at</code>", "TEXT", "시작·종료 시각. finished_at 내림차순 인덱스"],
-    ["<code>spec_digest</code>", "TEXT", "명세 다이제스트"],
-    ["<code>dataset_id</code>", "TEXT", "데이터셋 식별자 (인덱스)"],
-    ["<code>created_by</code> · <code>owner_id</code>", "TEXT", "요청자, 소유자"],
-    ["<code>error</code> · <code>error_code</code> · <code>error_stage</code>", "TEXT", "실패 요약, 코드, 단계"],
-], "small", ["62mm", "30mm", None]) + "<p>○ SQLite 저장소 목록</p>" + table(["파일", "표", "용도"], [
-    ["<code>_builds.sqlite</code>", "builds", "실행 인덱스 (Manifest에서 재구성 가능)"],
-    ["<code>_build_events.sqlite</code>", "build_events, run_submissions, run_endings", "실행 이벤트, 제출 기록, Manifest 없이 끝난 실행의 종료 기록"],
-    ["<code>_warehouse.sqlite</code>", "tables, table_snapshots, snapshot_leases, snapshot_holds", "웨어하우스 카탈로그와 스냅샷 보존"],
-    ["<code>_publish_receipts.sqlite</code>", "publish_receipts, publish_receipt_audit", "게시 영수증과 감사 기록"],
-    ["<code>.service/analyses.sqlite3</code>", "analyses", "저장된 분석"],
-    ["<code>.service/revisions.sqlite3</code>", "revisions, revision_audit", "명세·주석 개정 이력"],
-    ["<code>.service/uploads.sqlite3</code>", "uploads", "업로드 파일 메타데이터"],
-    ["<code>.service/provider-credentials.sqlite3</code>", "provider_credentials", "제공 기관 자격 증명 (암호화)"],
-    ["<code>.service/users.sqlite3</code>", "users", "가입 신청 원장"],
-], "small", ["58mm", "58mm", None]) + ul(["※ 출처: <code>store/build_index.py</code>, <code>store/inventory.py</code>"])))
+# ---------------------------------------------------------------- 프로그램 목록 · 테이블 정의서
+parts += detail.program_sheets()
+parts += detail.table_sheets()
 
 # ---------------------------------------------------------------- 핵심 소스코드
 code1 = '''def run_build(spec: BuildSpec, *, client: SourceClient, output_root: Path,
@@ -620,6 +488,44 @@ parts.append(sheet("핵심 소스코드(3) — kpubdata-studio · 근거 대조"
     "SQL은 현재 단계·소스와 맞지 않으면 버리며, 실행 전 최종 검사는 Builder가 수행",
     "<code>...</code>은 생략한 부분. 원본: <code>src/features/assistant/crossCheck.ts</code>",
 ])))
+
+
+code4 = '''def validate_read_only_sql(sql: str) -> ValidatedSql:
+    ...
+    expression = statements[0]
+    if not isinstance(expression, exp.Query):
+        raise UnsafeQueryError("only SELECT queries are allowed")
+
+    for with_node in expression.find_all(exp.With):
+        if with_node.args.get("recursive"):
+            raise UnsafeQueryError("recursive CTEs are not allowed")
+        for cte in with_node.expressions:
+            if cte.alias.casefold() == "dataset":
+                raise UnsafeQueryError("CTE alias must not shadow dataset")
+
+    _reject_unsupported_relations(cast(exp.Expression, expression))
+    _reject_unsafe_functions(cast(exp.Expression, expression))
+    root_scope = build_scope(expression)
+    if root_scope is None:
+        raise UnsafeQueryError("query scope could not be validated")
+
+    for scope in root_scope.traverse():
+        _validate_scope(scope)
+    if _reachable_dataset_refs(root_scope) == 0:
+        raise UnsafeQueryError("query must reference the logical dataset table")
+
+    canonical = expression.copy()
+    for node in canonical.walk():
+        node.comments = []
+    return ValidatedSql(canonical.sql(dialect="duckdb", pretty=False))'''
+parts.append(sheet("핵심 소스코드(4) — kpubdata-builder · 읽기 전용 SQL 검사", f"<pre>{html.escape(code4)}</pre>" + ul([
+    "사용자와 AI 도우미가 보낸 SQL을 실행 전에 검사하는 로직",
+    "SELECT 한 문장만 받고, 허용하지 않는 관계·함수를 거부하며, 논리 테이블 <code>dataset</code>을 참조하는지 확인",
+    "통과한 문장은 주석을 뺀 표준형으로 다시 만들어 반환하고, 실행에는 이 표준형만 사용",
+    "<code>...</code>은 생략한 부분. 원본: <code>src/kpubdata_builder/query/security.py</code>",
+])))
+
+parts += detail.test_deploy_sheets()
 
 # ---------------------------------------------------------------- 참고
 parts.append(sheet("참고", ul([
