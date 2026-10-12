@@ -81,3 +81,5 @@ table.perf td { height: 7mm; }
 .figure.m70 img { max-height: 76mm; }
 table.fixed { table-layout: fixed; }
 .figure.mid2 img { max-height: 95mm; }
+ul { list-style-type: "- "; }
+ul ul { list-style-type: "· "; }
