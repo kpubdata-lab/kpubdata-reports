@@ -1,0 +1,23 @@
+sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant S as Studio
+    participant B as Builder API
+    participant K as kpubdata
+    participant P as 공공데이터 API
+    U->>S: 카탈로그에서 소스 선택, 규칙 입력
+    S->>B: POST /preview · POST /validate
+    B->>K: 샘플 조회
+    K->>P: 공공 API 호출
+    P-->>K: 원천 응답
+    K-->>B: 표준 레코드
+    B-->>S: 스키마 · 샘플 · 검증 결과
+    U->>S: 만들기
+    S->>B: POST /builds (비동기 제출)
+    B-->>S: run_id
+    loop 종료 상태까지 800ms 간격
+        S->>B: GET /builds/{run_id}
+        B-->>S: queued · running · succeeded · failed · cancelled
+    end
+    Note over B: Bronze → Silver → Gold → 스냅샷 커밋 · manifest.json
+    S-->>U: 실행 상세, 테이블 스냅샷, 품질 결과

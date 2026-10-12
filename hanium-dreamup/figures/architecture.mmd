@@ -1,0 +1,19 @@
+flowchart TB
+    U([사용자]) --> S
+    subgraph ST[KPubData Studio · 웹 작업공간]
+        S[Catalog · Tables · SQL Workspace<br/>Reports · Quality · Monitoring]
+    end
+    S -->|BuildSpec 검증 · 실행 · 조회 요청| A
+    subgraph BD[KPubData Builder · 실행 · 웨어하우스]
+        A[HTTP API] --> P[오케스트레이터]
+        P --> B[Bronze<br/>원천 스냅샷]
+        B --> SI[Silver<br/>DuckDB 변환 · 검증]
+        SI --> G[Gold<br/>패키징]
+        G --> W[(테이블 스냅샷<br/>Parquet)]
+        G --> M[(Manifest · SQLite 인덱스)]
+        G --> E[Exporter · Publisher]
+    end
+    K[kpubdata<br/>공공 API 접근 라이브러리] --> B
+    O[(공공데이터 API)] --> K
+    W -->|읽기 전용 SQL| A
+    E --> H([파일 · Hugging Face · Kaggle])

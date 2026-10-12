@@ -1,0 +1,58 @@
+erDiagram
+    BUILDS {
+      TEXT run_id PK
+      TEXT status "ok | failed | cancelled"
+      TEXT started_at
+      TEXT finished_at
+      TEXT spec_digest
+      TEXT dataset_id
+      TEXT owner_id
+      TEXT error_code
+      TEXT error_stage
+    }
+    BUILD_EVENTS {
+      INTEGER seq PK
+      TEXT run_id
+      TEXT timestamp
+      TEXT event
+      TEXT status
+      TEXT source_key
+      TEXT stage
+    }
+    RUN_ENDINGS {
+      TEXT run_id PK
+      TEXT status
+      TEXT stage
+      TEXT code
+      TEXT summary
+      TEXT recorded_at
+    }
+    TABLES {
+      TEXT id PK
+      TEXT workspace_id
+      TEXT logical_name
+      TEXT current_snapshot_id
+      INTEGER revision
+    }
+    TABLE_SNAPSHOTS {
+      TEXT id PK
+      TEXT table_id FK
+      TEXT run_id
+      TEXT artifact_digest
+      INTEGER row_count
+      TEXT state
+      TEXT committed_at
+    }
+    ANALYSES {
+      TEXT analysis_id PK
+      TEXT name
+      TEXT sql
+      TEXT table_name
+      TEXT snapshot_id
+      TEXT created_at
+    }
+    BUILDS ||--o{ BUILD_EVENTS : "실행 이벤트"
+    BUILDS ||--o| RUN_ENDINGS : "Manifest 없이 끝난 실행"
+    BUILDS ||--o{ TABLE_SNAPSHOTS : "커밋한 스냅샷"
+    TABLES ||--o{ TABLE_SNAPSHOTS : "보유"
+    TABLE_SNAPSHOTS ||--o{ ANALYSES : "고정 대상"

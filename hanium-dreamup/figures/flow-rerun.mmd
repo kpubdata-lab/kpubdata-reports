@@ -1,0 +1,18 @@
+sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant H as 갱신 이력 (/refresh-jobs)
+    participant D as 실행 상세
+    participant E as 명세 편집 (/refresh-jobs/:id/edit)
+    participant B as Builder API
+    U->>H: 실행 목록 확인 · 검색 · 상태 필터
+    H->>B: GET /builds?limit=
+    U->>D: 실행 선택
+    D->>B: GET /builds/{id}/stages · /quality · /events · /spec
+    B-->>D: 단계 상태 · 품질 결과 · 이벤트 · 명세 스냅샷
+    U->>E: 편집
+    E->>B: POST /preview · POST /validate
+    U->>E: 검토 후 실행
+    E->>B: POST /builds (실패 · 취소된 실행이면 retry_of 포함)
+    B-->>E: run_id
+    E-->>U: 성공 · 오류 · 취소 결과 표시

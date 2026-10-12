@@ -1,0 +1,79 @@
+classDiagram
+    direction LR
+    class BuildSpec {
+      +dataset_id: str
+      +title: str
+      +description: str
+      +sources: SourceRef[1..*]
+      +exports: ExportTarget[0..*]
+      +splits: SplitSpec?
+      +pii: PiiPolicy?
+      +quality: QualityPolicy?
+      +composition: CompositionSpec?
+      +license: str?
+      +publish: bool
+      +refresh_cadence: str?
+    }
+    class SourceRef {
+      +kind: public_api | file | url
+      +provider: str
+      +dataset: str
+      +params: dict
+      +param_grid: dict
+      +alias: str
+      +schema: SchemaContract?
+      +gold: GoldSelection?
+    }
+    class SchemaContract {
+      +required: str[]
+      +dtypes: dict
+      +casts: dict
+      +rename: dict
+      +derived: DerivedColumn[]
+      +null_tokens: str[]
+    }
+    class GoldSelection {
+      +select: str[]
+      +filters: GoldFilter[]
+      +pii_columns: str[]
+    }
+    class ExportTarget {
+      +kind: str
+      +output_path: str
+      +options: dict
+    }
+    class SplitSpec {
+      +mode: ratio | key
+      +ratios: dict
+      +key: str
+      +seed: int
+    }
+    class QualityPolicy {
+      +max_duplicate_rate: float?
+      +max_null_ratio: dict
+      +min_rows: int?
+      +range: RangeRule[]
+    }
+    class CompositionSpec {
+      +name: str
+      +join: JoinSpec
+    }
+    class BuildManifest {
+      +build_id: str
+      +status: ok | failed | cancelled
+      +started_at / finished_at
+      +inputs / outputs
+      +row_counts: dict
+      +provenance: SourceProvenance[]
+      +quality_results: dict
+      +failures: RunFailure[]
+      +inputs_fingerprint: str?
+    }
+    BuildSpec "1" *-- "1..*" SourceRef
+    BuildSpec "1" *-- "0..*" ExportTarget
+    BuildSpec "1" o-- "0..1" SplitSpec
+    BuildSpec "1" o-- "0..1" QualityPolicy
+    BuildSpec "1" o-- "0..1" CompositionSpec
+    SourceRef "1" o-- "0..1" SchemaContract
+    SourceRef "1" o-- "0..1" GoldSelection
+    BuildSpec "1" ..> "0..*" BuildManifest : 실행마다 기록
