@@ -1,0 +1,12 @@
+stateDiagram-v2
+    direction LR
+    [*] --> queued: POST /builds
+    queued --> running: 작업자 할당
+    queued --> cancelled: 실행 전 취소
+    running --> succeeded: 모든 소스 성공, 테이블 커밋
+    running --> failed: 소스 또는 실행 오류
+    running --> cancelling: 취소 요청
+    cancelling --> cancelled: 다음 단계 경계 도달
+    succeeded --> [*]
+    failed --> [*]
+    cancelled --> [*]
