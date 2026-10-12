@@ -1,0 +1,11 @@
+flowchart TB
+    Q[사용자 질문] --> EV[근거 수집<br/>Builder 카탈로그 · 테이블 · 실행]
+    EV --> SC[비밀값 제거 후 LLM 호출<br/>system · evidence · question 역할 분리]
+    SC --> G1
+    subgraph GATE[응답 검증 4단계]
+        direction LR
+        G1[① 구조 검증<br/>Zod 스키마] --> G2[② 근거 대조<br/>없는 참조 · 동작 · SQL 제거]
+        G2 --> G3[③ Builder 검증<br/>/validate · /query]
+        G3 --> G4[④ 사용자 승인<br/>승인 전 실행 없음]
+    end
+    G4 --> OUT[답변 · 근거 · 제안 동작 표시]

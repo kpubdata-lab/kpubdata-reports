@@ -1,0 +1,80 @@
+/* 결과보고서와 제작설계서가 함께 쓰는 서식 */
+@page { size: A4; margin: 18mm 17mm 20mm; @bottom-center { content: "- " counter(page) " -"; font-size: 9pt; color: #333; } }
+* { box-sizing: border-box; }
+html { background: #e9ecf1; }
+body { margin: 0; color: #111; font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; font-size: 10.5pt; line-height: 1.6; }
+.sheet { background: #fff; max-width: 210mm; margin: 8mm auto; padding: 18mm 17mm; box-shadow: 0 1px 6px rgba(0,0,0,.18); }
+.screen-note { max-width: 210mm; margin: 8mm auto 0; padding: 3mm 5mm; background: #fff8d6; border: 1px solid #e0c95a; font-size: 9.5pt; }
+.todo { background: #fff3a8; padding: 0 1mm; }
+a { color: #1a3fa8; text-decoration: none; overflow-wrap: anywhere; }
+code { font-family: Menlo, Consolas, monospace; font-size: .88em; overflow-wrap: anywhere; }
+pre { background: #1f2330; color: #e8e8e8; font-family: Menlo, Consolas, monospace; font-size: 7.8pt; line-height: 1.45; padding: 4mm; margin: 2mm 0 3mm; white-space: pre-wrap; overflow-wrap: anywhere; break-inside: avoid; }
+
+/* 표지 */
+.form-id { font-size: 13pt; font-weight: 600; }
+.cover-title { margin: 48mm 0 0; text-align: center; padding: 3mm 0 2mm; border-top: 5px solid; border-bottom: 5px solid; border-image: linear-gradient(90deg, #2f55b5, #dbe5f7) 1; }
+.cover-title .year { font-size: 26pt; letter-spacing: .04em; }
+.cover-title .name { font-size: 36pt; letter-spacing: .06em; line-height: 1.3; }
+.cover-meta { text-align: center; margin-top: 10mm; font-size: 12pt; line-height: 1.9; }
+.cover-project { margin-top: 95mm; }
+.cover-project th { width: 30mm; }
+
+/* 제목 상자와 장·절 */
+.boxed { border: 1px solid #111; text-align: center; font-size: 19pt; font-weight: 700; padding: 2.5mm; margin: 0 0 5mm; }
+.boxed.wide { letter-spacing: .5em; }
+h2 { font-size: 15pt; font-weight: 400; margin: 9mm 0 3mm; break-after: avoid; }
+.sheet > h2:first-child, .boxed + h2 { margin-top: 0; }
+h2.bar { font-weight: 700; color: #fff; background: #2f55b5; padding: 2mm 4mm; margin-bottom: 5mm; }
+h3 { font-size: 13pt; font-weight: 700; margin: 6mm 0 2mm 3mm; break-after: avoid; }
+h4 { font-size: 12pt; font-weight: 400; margin: 4mm 0 2mm 5mm; break-after: avoid; }
+p, ul, ol { margin: 0 0 2.5mm 7mm; }
+ul, ol { padding-left: 5mm; }
+li { margin-bottom: 1mm; }
+td > ul, td > ol { margin: 0; padding-left: 4mm; }
+td > ul li { margin-bottom: .5mm; }
+
+/* 표 */
+table { border-collapse: collapse; width: 100%; margin: 2mm 0 5mm; font-size: 9.5pt; }
+th, td { border: 1px solid #111; padding: 1.6mm 2.2mm; vertical-align: middle; }
+th { background: #e6e6e6; font-weight: 700; text-align: center; }
+table.info th { background: #dde4f5; width: 30mm; }
+table.info td { vertical-align: top; }
+table.info .head { background: #dde4f5; text-align: center; font-weight: 700; }
+table.small { font-size: 8.6pt; }
+table.small th, table.small td { padding: 1.2mm 1.6mm; }
+tr { break-inside: avoid; }
+td.c { text-align: center; }
+td.shot { width: 36%; padding: 1.5mm; }
+td.shot img, .gallery img { width: 100%; display: block; border: 1px solid #ccc; }
+.checks span { display: inline-block; margin-right: 6mm; white-space: nowrap; }
+.gallery td { width: 33.33%; vertical-align: top; padding: 1.5mm; font-size: 8.5pt; text-align: center; }
+table.gantt th, table.gantt td { padding: 1.5mm 1mm; }
+table.gantt .m { width: 8mm; }
+table.perf th { font-weight: 400; }
+table.perf th.kind { font-weight: 700; text-align: left; width: 34mm; }
+table.perf td { height: 7mm; }
+.figure { margin: 3mm 0 4mm; text-align: center; break-inside: avoid; }
+.figure img { max-width: 100%; max-height: 150mm; }
+.figure.tall img { max-height: 215mm; }
+.figure.shot img { border: 1px solid #bbb; max-height: 105mm; }
+.caption { font-size: 8.5pt; color: #333; text-align: center; margin: 1mm 0 4mm; }
+.screen { break-inside: avoid; margin-bottom: 7mm; }
+.appendix-title { display: flex; align-items: stretch; border-top: 2px solid #23236b; border-bottom: 2px solid #23236b; margin-bottom: 6mm; }
+.appendix-title .tag { background: #2b2bb0; color: #fff; font-size: 16pt; padding: 1.5mm 3mm; }
+.appendix-title .txt { font-size: 16pt; padding: 1.5mm 5mm; }
+
+@media print {
+  html { background: #fff; }
+  .screen-note { display: none; }
+  .sheet { max-width: none; margin: 0; padding: 0; box-shadow: none; }
+  .sheet.break { break-before: page; }
+}
+@media (max-width: 800px) {
+  .sheet { margin: 0 0 4mm; padding: 8mm 5mm; }
+  .cover-title { margin-top: 20mm; } .cover-title .year { font-size: 18pt; } .cover-title .name { font-size: 24pt; }
+  .cover-project { margin-top: 30mm; }
+  .tablewrap { overflow-x: auto; }
+}
+.figure.mid img { max-height: 185mm; }
+.figure.low img { max-height: 30mm; }
+.figure.shot.two img { max-height: 60mm; }

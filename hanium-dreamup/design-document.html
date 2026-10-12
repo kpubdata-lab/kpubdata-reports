@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SW개발/HW제작 설계서 — 공공데이터 AI 데이터셋 자동 표준화 및 검증 플랫폼 개발</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="sheet">
+  <div class="cover-title" style="margin-top:60mm">
+    <div class="name">SW개발/HW제작 설계서</div>
+  </div>
+  <div class="cover-meta">
+    <div><strong>프로젝트 명 :</strong> 공공데이터 AI 데이터셋 자동 표준화 및 검증 플랫폼 개발</div>
+    <div>2026. 09. 08 작성 · 2026. 10. 12 개정</div>
+    <div>(26_HC277)</div>
+  </div>
+</section>
+<section class="sheet break">
+<h2 class="bar">수행 단계별 주요 산출물</h2>
+<div class="tablewrap"><table class="small"><tr><th style="width:22mm">단계</th><th>산출물</th><th style="width:26mm">일반<br>(모바일 APP·Web 등)</th><th style="width:30mm">응용 소프트웨어<br>(빅데이터·인공지능 등)</th><th style="width:26mm">응용 하드웨어<br>(IoT·로봇 등)</th><th style="width:20mm">본 설계서</th></tr><tr><td class="c" rowspan="3">환경 분석</td><td>시장/기술 환경 분석서</td><td class="c">△</td><td class="c">△</td><td class="c">△</td><td class="c">수록</td></tr><tr><td>설문조사 결과서</td><td class="c">△</td><td class="c">△</td><td class="c">△</td><td class="c">-</td></tr><tr><td>인터뷰 결과서</td><td class="c">△</td><td class="c">△</td><td class="c">△</td><td class="c">-</td></tr><tr><td class="c" rowspan="2">요구사항 분석</td><td>요구사항 정의서</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">수록</td></tr><tr><td>유즈케이스 정의서</td><td class="c">△</td><td class="c">△</td><td class="c">△</td><td class="c">-</td></tr><tr><td class="c" rowspan="4">아키텍처 설계</td><td>서비스 구성도(시스템 구성도)</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">수록</td></tr><tr><td>서비스 흐름도(데이터 흐름도)</td><td class="c">△</td><td class="c">○</td><td class="c">△</td><td class="c">수록</td></tr><tr><td>UI/UX 정의서</td><td class="c">△</td><td class="c">△</td><td class="c">△</td><td class="c">-</td></tr><tr><td>하드웨어/센서 구성도</td><td class="c">-</td><td class="c">-</td><td class="c">○</td><td class="c">해당 없음</td></tr><tr><td class="c" rowspan="7">기능 설계</td><td>메뉴 구성도</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">수록</td></tr><tr><td>화면 설계서</td><td class="c">○</td><td class="c">○</td><td class="c">△</td><td class="c">수록</td></tr><tr><td>엔티티 관계도</td><td class="c">○</td><td class="c">○</td><td class="c">△</td><td class="c">수록</td></tr><tr><td>기능 처리도(기능 흐름도)</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">수록</td></tr><tr><td>알고리즘 명세서/설명서</td><td class="c">△</td><td class="c">○</td><td class="c">○</td><td class="c">수록</td></tr><tr><td>데이터 수집처리 정의서</td><td class="c">-</td><td class="c">○</td><td class="c">-</td><td class="c">수록</td></tr><tr><td>하드웨어 설계도</td><td class="c">-</td><td class="c">-</td><td class="c">○</td><td class="c">해당 없음</td></tr><tr><td class="c" rowspan="3">개발 / 구현</td><td>프로그램 목록</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">수록</td></tr><tr><td>테이블 정의서</td><td class="c">○</td><td class="c">○</td><td class="c">△</td><td class="c">수록</td></tr><tr><td>핵심 소스코드</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">수록</td></tr></table></div><ul><li>※ ○ 필수, △ 선택</li><li>본 프로젝트는 응용 소프트웨어(빅데이터·인공지능) 유형에 해당하며, 필수 산출물 전체와 시장/기술 환경 분석서를 수록함</li><li>전용 하드웨어를 쓰지 않으므로 하드웨어 관련 산출물은 작성하지 않음</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">시장/기술 동향 분석</h2>
+<h3>1. 시장 동향</h3><ul><li>AI 학습 데이터 시장은 2024년 약 26억 달러에서 2030년 86억 달러로 연평균 21.9% 성장 전망 (Grand View Research, 2025)</li><li>생성형 AI·LLM 확산으로 출처와 품질이 확인된 학습·분석용 데이터 수요 증가</li><li>국내 공공데이터는 OECD 공공데이터 평가(OURdata Index)에서 4회 연속 1위 기록, 개방 건수는 꾸준히 증가</li><li>개방은 원천 API 제공까지이고, 분석·학습에 바로 쓸 수 있는 표 형태로 가공하는 작업은 이용자 몫으로 남아 있음</li><li>→ 공공데이터를 수집·정제·검증해 재사용 가능한 테이블과 데이터셋으로 만들어 주는 도구가 필요한 시점</li></ul><h3>2. 기술 성숙도 단계</h3><div class="tablewrap"><table class="small"><tr><th style="width:18mm">단계</th><th style="width:32mm">정의</th><th>개요</th></tr><tr><td class="c">Level 0</td><td>수동 처리</td><td>개별 스크립트로 API를 호출하고 수기로 정제. 표준·재현성 없음</td></tr><tr><td class="c">Level 1</td><td>부분 자동화</td><td>수집·정제를 스크립트화. 형식 변환 일부만 자동화</td></tr><tr><td class="c">Level 2</td><td>파이프라인화</td><td>수집→정제→검증을 ETL 파이프라인으로 연결 (dbt·Airflow 등)</td></tr><tr><td class="c"><strong>Level 3</strong></td><td><strong>선언적·재현 빌드</strong></td><td><strong>명세(BuildSpec) 기반 실행, 출처·Manifest 기록, 스냅샷 관리, 다중 포맷 내보내기 ★ 본 프로젝트</strong></td></tr><tr><td class="c">Level 4</td><td>지능형 자동화</td><td>스키마 자동 매핑, 품질 자동 개선, LLM 기반 데이터 큐레이션 (지향점)</td></tr></table></div>
+</section>
+<section class="sheet break">
+<h2 class="bar">시장/기술 동향 분석</h2>
+<h3>3. 경쟁 제품 비교</h3><div class="tablewrap"><table class="small"><tr><th>기능</th><th style="width:20mm">본 프로젝트</th><th style="width:24mm">공공데이터 포털</th><th style="width:20mm">HF Datasets</th><th style="width:16mm">Kaggle</th><th style="width:16mm">dbt·ETL</th><th style="width:14mm">DVC</th></tr><tr><td>공공 API 직접 수집</td><td class="c">○</td><td class="c">○</td><td class="c">×</td><td class="c">×</td><td class="c">△</td><td class="c">×</td></tr><tr><td>자동 정규화·표준화</td><td class="c">○</td><td class="c">×</td><td class="c">×</td><td class="c">×</td><td class="c">○</td><td class="c">×</td></tr><tr><td>선언적 빌드(명세)</td><td class="c">○</td><td class="c">×</td><td class="c">×</td><td class="c">×</td><td class="c">○</td><td class="c">△</td></tr><tr><td>다중 포맷 내보내기</td><td class="c">○</td><td class="c">△</td><td class="c">○</td><td class="c">△</td><td class="c">×</td><td class="c">×</td></tr><tr><td>데이터셋 카드 자동 생성</td><td class="c">○</td><td class="c">×</td><td class="c">△</td><td class="c">△</td><td class="c">×</td><td class="c">×</td></tr><tr><td>재현성(Manifest·버전)</td><td class="c">○</td><td class="c">×</td><td class="c">△</td><td class="c">×</td><td class="c">△</td><td class="c">○</td></tr><tr><td>허브 배포(HF·Kaggle)</td><td class="c">○</td><td class="c">×</td><td class="c">○</td><td class="c">○</td><td class="c">×</td><td class="c">×</td></tr><tr><td>비개발자용 웹 UI</td><td class="c">○</td><td class="c">△</td><td class="c">△</td><td class="c">○</td><td class="c">×</td><td class="c">×</td></tr><tr><td>국내 공공데이터 특화</td><td class="c">○</td><td class="c">○</td><td class="c">×</td><td class="c">×</td><td class="c">×</td><td class="c">×</td></tr></table></div><ul><li>○ 제공, △ 일부 제공, × 미제공</li></ul><h3>4. 차별화 비교</h3><div class="tablewrap"><table class="small"><tr><th style="width:32mm">구분</th><th>기존 접근</th><th>본 프로젝트</th></tr><tr><td class="c">공공데이터 포털</td><td>원천 API 제공까지. 분석·학습 적합성은 이용자가 확인</td><td>정제·검증·분할·문서화를 거친 테이블과 데이터셋으로 산출</td></tr><tr><td class="c">범용 ETL 도구<br>(Airflow 등)</td><td>파이프라인 실행은 되나 도메인 지식과 검증 규칙은 사용자 몫</td><td>kpubdata가 제공하는 공공 API 접근 위에 스키마 계약·품질 규칙을 명세로 선언</td></tr><tr><td class="c">데이터 허브<br>(Hugging Face 등)</td><td>배포·공유 계층. 생성 과정은 남지 않음</td><td>생성 규칙·실행 기록·입력 지문을 Manifest로 남기고 카드와 함께 게시</td></tr><tr><td class="c">일반 LLM 데이터 도구</td><td>LLM이 스키마와 내용을 추정해 생성</td><td>LLM 답변을 Builder 근거와 대조하고 사용자 승인 전에는 실행하지 않음</td></tr></table></div>
+</section>
+<section class="sheet break">
+<h2 class="bar">요구사항 정의서</h2>
+<div class="tablewrap"><table class="small"><tr><th style="width:16mm">요구사항ID</th><th style="width:22mm">요구사항명</th><th style="width:17mm">기능ID</th><th style="width:27mm">기능명</th><th>세부사항</th><th style="width:38mm">예외사항</th><th style="width:11mm">상태</th></tr><tr><td class="c" rowspan="4"><strong>A01</strong></td><td class="c" rowspan="4">데이터 수집</td><td class="c">A01_B01</td><td>공공 API 수집</td><td>kpubdata로 공공 API를 호출해 원천 레코드를 페이지 단위로 수집·저장</td><td>수집 실패 시 해당 소스를 실패로 기록하고 나머지 소스는 계속 처리</td><td class="c">구현</td></tr><tr><td class="c">A01_B02</td><td>파일·URL 수집</td><td>업로드 파일(CSV·JSON·JSONL·Parquet)과 HTTPS URL(JSON·JSONL·CSV)을 소스로 사용</td><td>허용되지 않은 형식·주소는 명세 검증에서 거부</td><td class="c">구현</td></tr><tr><td class="c">A01_B03</td><td>소스 카탈로그</td><td>kpubdata에 등록된 제공 기관·데이터셋 목록을 조회</td><td>조회 실패 시 오류 상태와 다시 시도 제공</td><td class="c">구현</td></tr><tr><td class="c">A01_B04</td><td>정기 수집</td><td>GitHub Actions 일정에 따라 분야별 데이터를 주기적으로 수집·게시</td><td>실패 시 이슈를 자동 등록</td><td class="c">구현</td></tr><tr><td class="c" rowspan="7"><strong>A02</strong></td><td class="c" rowspan="7">데이터 가공·품질</td><td class="c">A02_B01</td><td>BuildSpec 작성</td><td>소스·스키마 계약·품질·분할·내보내기를 하나의 명세로 선언</td><td>필수 항목 누락 시 실행 전에 오류 목록 반환</td><td class="c">구현</td></tr><tr><td class="c">A02_B02</td><td>BuildSpec 검증</td><td>필수 항목, 소스 종류, 스키마 계약, 분할, 라이선스 등 15개 영역 검사</td><td>위반 사항을 code·path·message로 모두 모아 반환</td><td class="c">구현</td></tr><tr><td class="c">A02_B03</td><td>결과 미리보기</td><td>저장 없이 소스별 스키마와 샘플 행을 확인</td><td>미리보기 실패 시 원인을 화면에 표시</td><td class="c">구현</td></tr><tr><td class="c">A02_B04</td><td>Bronze 원천 보존</td><td>수집한 원천 레코드와 수집 시각·파라미터·건수·체크섬을 보존</td><td>저장 실패 시 해당 소스를 실패 처리</td><td class="c">구현</td></tr><tr><td class="c">A02_B05</td><td>Silver 정규화</td><td>DuckDB로 결측 토큰·컬럼 병합·이름 변경·자리 채움·형 변환·파생 컬럼을 순서대로 적용</td><td>형 변환으로 값이 사라지면 오류 처리</td><td class="c">구현</td></tr><tr><td class="c">A02_B06</td><td>품질 검사</td><td>필수 컬럼, 자료형, 중복률, 결측률, 최소 행 수, 값 범위, 컬럼 간 비교 검사</td><td>fail은 Gold 전에 중단, warn은 기록 후 진행</td><td class="c">구현</td></tr><tr><td class="c">A02_B07</td><td>Gold 선택·분할</td><td>행 필터와 컬럼 선택, 비율·키 기준 분할, 두 소스 조인</td><td>분할 비율 합이 맞지 않으면 검증 오류</td><td class="c">구현</td></tr></table></div>
+</section>
+<section class="sheet break">
+<h2 class="bar">요구사항 정의서</h2>
+<div class="tablewrap"><table class="small"><tr><th style="width:16mm">요구사항ID</th><th style="width:22mm">요구사항명</th><th style="width:17mm">기능ID</th><th style="width:27mm">기능명</th><th>세부사항</th><th style="width:38mm">예외사항</th><th style="width:11mm">상태</th></tr><tr><td class="c" rowspan="5"><strong>A03</strong></td><td class="c" rowspan="5">산출물 생성·배포</td><td class="c">A03_B01</td><td>데이터셋 카드</td><td>스키마·샘플·출처·처리 내역·개인정보 항목을 담은 README.md와 card.json 생성</td><td>빈 항목이 있으면 게시를 막음</td><td class="c">구현</td></tr><tr><td class="c">A03_B02</td><td>다중 포맷 내보내기</td><td>CSV·JSONL·Parquet·Markdown·Hugging Face·Kaggle 형식으로 출력</td><td>등록되지 않은 형식은 검증에서 거부</td><td class="c">구현</td></tr><tr><td class="c">A03_B03</td><td>Manifest 기록</td><td>상태·입력·산출물·행 수·출처·품질 결과·실패 내역을 manifest.json으로 기록</td><td>Manifest 없이 끝난 실행은 종료 기록으로 따로 남김</td><td class="c">구현</td></tr><tr><td class="c">A03_B04</td><td>테이블 스냅샷</td><td>성공한 실행의 Gold를 웨어하우스 스냅샷으로 커밋하고 최근 3개 유지</td><td>동시 갱신 충돌 시 커밋을 거부하고 사유 기록</td><td class="c">구현</td></tr><tr><td class="c">A03_B05</td><td>외부 게시</td><td>산출물을 로컬·Hugging Face·Kaggle로 게시. 준비 상태 점검 후 실행</td><td>라이선스·개인정보 검사 미통과 시 게시 차단</td><td class="c">구현</td></tr><tr><td class="c" rowspan="7"><strong>A04</strong></td><td class="c" rowspan="7">웹 작업공간<br>(Studio)</td><td class="c">A04_B01</td><td>홈</td><td>조치가 필요한 테이블, 최근 스냅샷·분석, 연결 문제 표시</td><td>조회 실패 시 영역별 오류 표시</td><td class="c">구현</td></tr><tr><td class="c">A04_B02</td><td>카탈로그·테이블 만들기</td><td>소스를 찾아 3단계 마법사로 테이블 생성</td><td>검증 실패 시 실행 차단</td><td class="c">구현</td></tr><tr><td class="c">A04_B03</td><td>테이블·테이블 상세</td><td>스냅샷·스키마·프로파일·미리보기·품질 확인</td><td>웨어하우스가 없으면 실행 기준 보기로 전환</td><td class="c">구현</td></tr><tr><td class="c">A04_B04</td><td>SQL 작업 공간</td><td>스냅샷에 읽기 전용 SQL 실행, 분석 저장, 집계 차트, 결과 내보내기</td><td>허용되지 않은 SQL은 Builder가 거부</td><td class="c">구현</td></tr><tr><td class="c">A04_B05</td><td>리포트</td><td>실행 근거를 바탕으로 리포트 작성, Markdown·HTML 내려받기</td><td>브라우저에만 저장됨을 화면에 표시</td><td class="c">구현</td></tr><tr><td class="c">A04_B06</td><td>갱신 이력·게시</td><td>실행 목록·상세·산출물 확인, 재실행, Hugging Face 게시</td><td>실행 실패 시 실패 단계와 코드 표시</td><td class="c">구현</td></tr><tr><td class="c">A04_B07</td><td>연결·설정</td><td>제공 기관 자격 증명 관리, Builder 연결 상태·버전 확인</td><td>최소 계약 버전 미만이면 경고 배너</td><td class="c">구현</td></tr></table></div>
+</section>
+<section class="sheet break">
+<h2 class="bar">요구사항 정의서</h2>
+<div class="tablewrap"><table class="small"><tr><th style="width:16mm">요구사항ID</th><th style="width:22mm">요구사항명</th><th style="width:17mm">기능ID</th><th style="width:27mm">기능명</th><th>세부사항</th><th style="width:38mm">예외사항</th><th style="width:11mm">상태</th></tr><tr><td class="c" rowspan="2"><strong>A05</strong></td><td class="c" rowspan="2">운영 자동화</td><td class="c">A05_B01</td><td>CI</td><td>Builder: ruff·mypy·pytest(Python 3.10~3.13). Studio: ESLint·Vitest·Playwright</td><td>검사 실패 시 병합 차단</td><td class="c">구현</td></tr><tr><td class="c">A05_B02</td><td>계약 호환 점검</td><td>Builder API 계약과 Studio 스키마의 불일치를 CI에서 검사</td><td>불일치 시 실패</td><td class="c">구현</td></tr><tr><td class="c" rowspan="4"><strong>A06</strong></td><td class="c" rowspan="4">데이터 보안·거버넌스</td><td class="c">A06_B01</td><td>개인정보 검사·마스킹</td><td>주민등록번호·전화번호·이메일·사업자번호 패턴과 컬럼명 규칙으로 검사, 선언한 컬럼 마스킹</td><td>block 모드에서 검출 시 해당 소스 중단</td><td class="c">구현</td></tr><tr><td class="c">A06_B02</td><td>라이선스·재배포 판정</td><td>소스별 재배포 조건(허용·비상업·금지·미확인) 중 가장 엄격한 값 적용</td><td>게시할 때 라이선스 미기재면 검증 오류</td><td class="c">구현</td></tr><tr><td class="c">A06_B03</td><td>읽기 전용 SQL 검사</td><td>단일 SELECT만 허용, 테이블 함수·비결정 함수·외부 접근 차단</td><td>위반 시 실행하지 않고 거부</td><td class="c">구현</td></tr><tr><td class="c">A06_B04</td><td>인증·자격 증명</td><td>OIDC(Keycloak) 로그인, 제공 기관 키 암호화 저장</td><td>토큰 갱신 실패 시 로그인 화면으로 이동</td><td class="c">구현</td></tr><tr><td class="c" rowspan="2"><strong>A07</strong></td><td class="c" rowspan="2">AI 보조</td><td class="c">A07_B01</td><td>Ask KPubData</td><td>화면 문맥과 Builder 근거를 바탕으로 답변·SQL·다음 동작 제안</td><td>근거에 없는 참조는 답변에서 제거</td><td class="c">구현</td></tr><tr><td class="c">A07_B02</td><td>LLM 스키마 자동 매핑</td><td>컬럼명을 표준 용어로 자동 매핑</td><td>-</td><td class="c">제외</td></tr><tr><td class="c" rowspan="2"><strong>A08</strong></td><td class="c" rowspan="2">운영 관제·품질 시각화</td><td class="c">A08_B01</td><td>모니터링</td><td>API·대기열·작업자·스냅샷 저장소 상태와 24시간 실행 통계</td><td>권한이 없으면 안내 문구만 표시</td><td class="c">구현</td></tr><tr><td class="c">A08_B02</td><td>품질 센터</td><td>WARN·FAIL 결과와 스키마 변화를 테이블 전체에서 조회</td><td>점수는 계산하지 않고 검사 결과만 표시</td><td class="c">구현</td></tr><tr><td class="c" rowspan="1"><strong>A09</strong></td><td class="c" rowspan="1">버전 관리</td><td class="c">A09_B01</td><td>스냅샷·명세 이력</td><td>테이블 스냅샷 revision, 명세 개정 이력과 되돌리기</td><td>충돌 시 최신 revision 기준으로 거부</td><td class="c">구현</td></tr></table></div><ul><li>A07_B02는 구현 범위에서 제외하고, 컬럼 대응은 명세의 rename·coalesce로 선언함</li><li>개인정보 검사는 규칙 기반으로, 버전 관리는 웨어하우스 스냅샷과 명세 개정 이력으로 구현함</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">서비스 구성도 - 서비스 시나리오</h2>
+<div class="figure tall"><img src="figures/architecture.svg" alt="서비스 구성도"></div>
+</section>
+<section class="sheet break">
+<h2 class="bar">서비스 구성도 - 서비스 시나리오</h2>
+<h3>1. 구성 요소</h3><div class="tablewrap"><table class=""><tr><th style="width:38mm">구성 요소</th><th>역할</th></tr><tr><td class="c">KPubData Studio</td><td>웹 작업공간. 화면과 사용자 흐름 담당. 실행 엔진이 아니며 Builder API만 호출</td></tr><tr><td class="c">KPubData Builder</td><td>실행·웨어하우스 계층. 명세 검증, Bronze·Silver·Gold 실행, 스냅샷·Manifest 기록, 읽기 전용 SQL 제공</td></tr><tr><td class="c">kpubdata</td><td>공공 API 접근 라이브러리. 제공 기관별 호출과 표준 레코드 변환 담당</td></tr><tr><td class="c">저장소</td><td>실행 작업공간(로컬 파일), 웨어하우스 스냅샷(Parquet), SQLite 인덱스</td></tr><tr><td class="c">외부 대상</td><td>Hugging Face·Kaggle 등 게시 대상, OIDC 인증 제공자(Keycloak)</td></tr></table></div><h3>2. 테이블 만들기 (Studio 기반)</h3><ul><li>① 사용자가 Studio 카탈로그에서 소스를 고르고 규칙(BuildSpec)을 구성</li><li>② Studio가 Builder API에 미리보기와 검증을 요청해 스키마와 샘플 확인</li><li>③ 만들기를 실행하면 Builder가 Bronze→Silver→Gold로 가공하고 스냅샷과 Manifest 생성</li><li>④ 사용자는 테이블 상세, SQL 작업 공간, 리포트에서 결과 활용</li></ul><h3>3. 정기 수집·게시 (일정 기반)</h3><ul><li>① GitHub Actions 일정이 분야별 수집 작업을 주기적으로 시작 (기상 3시간, 관광·의약품 주 1회, 부동산 월초)</li><li>② kpubdata가 공공 API에서 데이터를 수집하고 게시 스크립트가 정제·패키징</li><li>③ 검증을 통과한 데이터셋을 Hugging Face에 게시</li><li>④ 실패하면 이슈를 자동 등록해 담당자가 확인</li><li>정기 게시는 기존 게시 스크립트 경로로 동작하며, BuildSpec 기반 경로로 순차 이전 중임</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">서비스 흐름도</h2>
+<div class="figure "><img src="figures/flow-service.svg" alt="서비스 흐름도"></div><ul><li>① 규칙 작성 — 사용자가 카탈로그에서 소스를 선택하고 파라미터와 규칙 입력</li><li>② 미리보기·검증 — Studio가 <code>POST /preview</code>, <code>POST /validate</code>를 동시에 요청</li><li>③ 원천 조회 — Builder가 kpubdata를 통해 공공 API에서 샘플을 받아 표준 레코드로 변환</li><li>④ 실행 제출 — <code>POST /builds</code>로 비동기 제출하고 <code>run_id</code> 수신</li><li>⑤ 진행 확인 — <code>GET /builds/{run_id}</code>를 800ms 간격으로 조회 (탭이 숨겨지면 중단)</li><li>⑥ 결과 확인 — 실행 상세에서 단계별 상태·품질·이벤트 확인, 테이블 스냅샷 활용</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">메뉴 구성도</h2>
+<div class="figure "><img src="figures/menu.svg" alt="메뉴 구성도"></div><div class="tablewrap"><table class="small"><tr><th style="width:16mm">그룹</th><th style="width:30mm">메뉴</th><th style="width:34mm">경로</th><th>설명</th></tr><tr><td class="c">-</td><td>홈</td><td><code>/</code></td><td>조치가 필요한 테이블과 최근 변경</td></tr><tr><td class="c" rowspan="2">데이터</td><td>카탈로그</td><td><code>/discover</code></td><td>공공 API 소스 데이터셋 탐색</td></tr><tr><td>테이블</td><td><code>/tables</code></td><td>소스로 만든 테이블 목록과 상세</td></tr><tr><td class="c" rowspan="4">분석</td><td>SQL 작업 공간</td><td><code>/sql</code></td><td>테이블 스냅샷에 SQL 실행</td></tr><tr><td>저장된 분석</td><td><code>/analyses</code></td><td>스냅샷에 고정해 저장한 분석</td></tr><tr><td>작업대</td><td><code>/workspace</code></td><td>최근 작업과 저장한 BuildSpec</td></tr><tr><td>리포트</td><td><code>/reports</code></td><td>근거 기반 리포트 작성</td></tr><tr><td class="c" rowspan="4">운영</td><td>갱신 이력</td><td><code>/refresh-jobs</code></td><td>테이블을 만들고 갱신한 실행 기록</td></tr><tr><td>품질</td><td><code>/quality</code></td><td>품질 검사 결과와 스키마 변화</td></tr><tr><td>모니터링</td><td><code>/monitoring</code></td><td>Builder 상태와 실행 통계</td></tr><tr><td>관리</td><td><code>/admin</code></td><td>운영 정책·전체 실행·가입 승인 (관리자 전용)</td></tr><tr><td class="c" rowspan="2">하단</td><td>연결</td><td><code>/connections</code></td><td>제공 기관 자격 증명</td></tr><tr><td>설정</td><td><code>/settings</code></td><td>Builder 연결, 계정, AI 키</td></tr></table></div><ul><li>테이블 만들기(<code>/add</code>)는 메뉴가 아니라 카탈로그·테이블 화면의 동작으로 진입</li><li>상단 바: 경로 표시, Demo·Beta 배지, 통합 검색(⌘K), Ask KPubData 버튼, 계정 메뉴</li><li>이전 경로(<code>/datasets</code>, <code>/builds</code>, <code>/provider</code>, <code>/validate</code>, <code>/preview</code>, <code>/artifacts</code>)는 새 경로로 자동 이동</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 로그인 (1/20)</h2>
+<div class="figure shot"><img src="figures/screens/login.png" alt="로그인 화면"></div><table class="info small"><tr><th>화면 개요</th><td>Keycloak 로그인으로 들어가는 진입 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>좌측 소개 영역: 제품 문구와 핵심 단계 배지 7종 (Source·BuildSpec·Preview·Validate·Build·Quality·AI)</li><li>우측 로그인 카드: Google 로그인, 이메일 로그인 버튼</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>로그인 버튼 클릭 시 Keycloak 인증 화면으로 이동 (OIDC Authorization Code + PKCE)</li><li>데모 모드에서만 이메일·비밀번호 입력 폼 표시</li><li>인증된 사용자는 원래 가려던 화면으로 이동</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 홈 (2/20)</h2>
+<div class="figure shot"><img src="figures/screens/home.png" alt="홈 화면"></div><table class="info small"><tr><th>화면 개요</th><td>조치가 필요한 테이블과 최근 변경을 먼저 보여주는 시작 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>조치가 필요한 테이블 (최대 6개)</li><li>최근 스냅샷과 이를 만든 실행 (최대 5개)</li><li>최근 저장한 분석, 연결 문제</li><li>상단 '새 SQL 쿼리' 버튼</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>테이블과 실행이 하나도 없으면 첫 실행 체크리스트(이용 신청 → 키 등록 → 키 확인 → 첫 테이블) 표시</li><li>웨어하우스가 없는 배포에서는 최근 스냅샷 대신 최근 실행 표시</li><li>모든 항목은 한 번의 클릭으로 해당 테이블·분석으로 이동</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 카탈로그 (3/20)</h2>
+<div class="figure shot"><img src="figures/screens/catalog.png" alt="카탈로그 화면"></div><table class="info small"><tr><th>화면 개요</th><td>Builder가 제공하는 소스 데이터셋을 비교 표로 찾는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>검색창, 제공 기관 선택, '서비스 키 필요'·'활용 신청 필요' 체크박스</li><li>비교 표: 소스, 제공 기관, 표현, 지원 동작, 접근 조건, 만든 테이블, 호출 한도, 시작</li><li>상단 '테이블 만들기' 버튼</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>필터 조건은 주소(<code>?q=&amp;provider=</code>)에 남아 공유 가능</li><li>행의 시작 버튼 클릭 시 소스가 채워진 채 테이블 만들기로 이동</li><li>로딩·오류(다시 시도)·결과 없음 상태를 구분해 표시</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 테이블 만들기 (4/20)</h2>
+<div class="figure shot two"><img src="figures/screens/add.png" alt="테이블 만들기 화면"></div><div class="figure shot two"><img src="figures/screens/add-source.png" alt="테이블 만들기 화면"></div><table class="info small"><tr><th>화면 개요</th><td>소스 선택부터 생성까지 3단계로 진행하는 마법사</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>단계 표시: 구성 → 미리보기·검증 → 만들기</li><li>1단계: 소스 종류 카드 3종(공공 API, 파일 업로드, URL / REST API)과 가져오기 설정</li><li>2단계: 소스별 스키마·샘플과 검증 결과</li><li>3단계: 최종 명세, 테이블 이름, 같은 이름의 테이블 안내</li><li>하단: 이전, 초안 저장, 다음</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>소스 종류를 고르지 않았거나 명세 오류가 있으면 다음 단계 차단</li><li>자격 증명이 없으면 연결 화면으로 안내 후 복귀</li><li>미리보기가 오래되면 만들기 차단</li><li>제출이 수락되면 초안을 정리하고 실행 상세로 이동</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 테이블 (5/20)</h2>
+<div class="figure shot"><img src="figures/screens/tables.png" alt="테이블 화면"></div><table class="info small"><tr><th>화면 개요</th><td>만든 테이블을 현재 스냅샷과 상태로 확인하는 목록 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>검색창, 제공 기관 선택, '조치 필요만' 필터</li><li>표: 테이블, 스냅샷, 행 수, 상태, 완전성, 갱신, 마지막 갱신</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>행 클릭 시 테이블 상세로 이동</li><li>웨어하우스가 없으면 스냅샷 열을 숨기고 안내 한 줄 표시</li><li>테이블이 없으면 테이블 만들기로 가는 안내 표시</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 테이블 상세 (6/20)</h2>
+<div class="figure shot"><img src="figures/screens/table-detail.png" alt="테이블 상세 화면"></div><table class="info small"><tr><th>화면 개요</th><td>테이블 하나의 스냅샷·스키마·품질을 탭으로 확인하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>탭: 개요, 스키마, 프로파일, 미리보기, 품질, 스냅샷</li><li>상단 동작: 이 테이블에 대해 질문, 갱신, 쿼리</li><li>소스가 여러 개인 테이블은 소스 전환 제공</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>과거 스냅샷을 볼 때 '현재로 돌아가기' 버튼 표시</li><li>스냅샷 탭에서 실행 상세·명세 편집·게시로 이동</li><li>커밋된 스냅샷이 없으면 실행 기준 보기(개요·스키마·미리보기·품질·실행)로 표시</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — SQL 작업 공간 (7/20)</h2>
+<div class="figure shot"><img src="figures/screens/sql.png" alt="SQL 작업 공간 화면"></div><table class="info small"><tr><th>화면 개요</th><td>테이블 스냅샷 하나에 읽기 전용 SQL을 실행하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>테이블 탐색기 (테이블 → 소스 → 컬럼)</li><li>스냅샷 선택(기본값 현재), SQL 입력창, 실행 버튼</li><li>결과 표(<code>table@snapshot · rev N</code>), 분석 저장, 집계 차트, 결과 내보내기</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>⌘/Ctrl+Enter로 실행</li><li>쿼리 하나에 테이블 하나만 조회</li><li>기본 문장은 <code>SELECT * FROM dataset LIMIT 100</code></li><li>SQL 안전성 검사는 Builder가 수행</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 저장된 분석 (8/20)</h2>
+<div class="figure shot"><img src="figures/screens/analyses.png" alt="저장된 분석 화면"></div><table class="info small"><tr><th>화면 개요</th><td>스냅샷에 고정해 저장한 분석을 다시 실행하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>분석 카드: 이름, <code>table@snapshot</code>, 저장 정보</li><li>버튼: 다시 실행, SQL 작업 공간에서 열기, 삭제</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>저장된 분석이 없으면 SQL 작업 공간으로 가는 안내 표시</li><li>삭제는 확인 후 진행</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 작업대 (9/20)</h2>
+<div class="figure shot"><img src="figures/screens/workspace.png" alt="작업대 화면"></div><table class="info small"><tr><th>화면 개요</th><td>최근 작업과 저장한 BuildSpec을 한곳에서 관리하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>최근 작업 목록 (테이블·실행·리포트·저장한 명세)</li><li>저장한 BuildSpec: 이름 변경, 복제, 삭제</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>저장한 BuildSpec은 이 브라우저에만 보관됨을 배지로 표시</li><li>저장한 명세를 열면 테이블 만들기로 이동</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 리포트 (10/20)</h2>
+<div class="figure shot"><img src="figures/screens/reports.png" alt="리포트 화면"></div><table class="info small"><tr><th>화면 개요</th><td>실행 근거를 기준으로 리포트를 만들고 편집하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>새 리포트 만들기: 테이블·실행 선택</li><li>리포트 목록: 열기, 이름 변경, 복제, 삭제</li><li>편집기: 근거 영역(1~6), AI 분석(7), 사용자 메모(8), 자동 저장</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>리포트는 이 브라우저에만 저장됨을 배지로 표시</li><li>근거 새로 고침, Markdown·HTML 내려받기, 인쇄 제공</li><li>선택한 실행이 기준으로 고정되며 새 실행이 생겨도 자동으로 바뀌지 않음</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 갱신 이력 (11/20)</h2>
+<div class="figure shot"><img src="figures/screens/refresh-history.png" alt="갱신 이력 화면"></div><table class="info small"><tr><th>화면 개요</th><td>테이블을 만들고 갱신한 실행을 한 표로 조회하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>검색창, 상태 필터(전체·성공·실패·실행 중·대기·취소), 테이블 필터</li><li>표: 실행 ID, 테이블, 상태, 시작, 소요 시간, 스냅샷</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>행 클릭 시 실행 상세로 이동</li><li>'더 보기'로 이전 실행 추가 조회</li><li>필터 조건은 주소에 남음</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 실행 상세 (12/20)</h2>
+<div class="figure shot"><img src="figures/screens/run-detail.png" alt="실행 상세 화면"></div><table class="info small"><tr><th>화면 개요</th><td>실행 하나의 단계별 결과와 품질, 이벤트를 확인하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>상단: 제목, 상태, 취소 버튼(진행 중일 때), 편집·산출물·게시 링크</li><li>소스별 진행: Bronze → Silver → Gold → 출력</li><li>품질 결과, 실패 근거, 실행 이벤트 타임라인, 명세 스냅샷</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>진행 중에는 800ms 간격으로 상태 갱신, 이벤트는 3초 간격</li><li>취소는 단계 경계에서 반영되며 확인 후 진행</li><li>실행 없음·조회 실패·권한 없음을 각각 다른 안내로 표시</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 산출물 (13/20)</h2>
+<div class="figure shot"><img src="figures/screens/artifacts.png" alt="산출물 화면"></div><table class="info small"><tr><th>화면 개요</th><td>실행이 만든 파일과 Manifest를 확인하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>Manifest 요약, 내려받을 수 있는 파일 목록, manifest.json 원문</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>영역별로 따로 불러와 한 영역의 실패가 다른 영역을 막지 않음</li><li>파일 내려받기는 게시와 구분됨</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 게시 (14/20)</h2>
+<div class="figure shot"><img src="figures/screens/publish.png" alt="게시 화면"></div><table class="info small"><tr><th>화면 개요</th><td>실행 결과를 Hugging Face에 게시하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>게시 준비 상태 (차단 사유·경고)</li><li>데이터 카드 미리보기</li><li>대상 저장소(<code>owner/dataset</code>), 비공개 여부</li><li>검토·확인 후 '지금 게시'</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>차단 사유가 있으면 게시 버튼 비활성</li><li>비상업 조건 데이터는 별도 확인 절차</li><li>결과가 불명확하면 자동 재시도 없이 복구 패널(대조·영수증 초기화) 제공</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 품질 (15/20)</h2>
+<div class="figure shot"><img src="figures/screens/quality.png" alt="품질 화면"></div><table class="info small"><tr><th>화면 개요</th><td>테이블 전체의 품질 경고와 스키마 변화를 모아 보는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>필터: 상태, 테이블, 분류</li><li>표: 테이블, 소스, 규칙, 컬럼, 상태, 실제값 / 기준값, 영향 행 수, 스냅샷</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>점수 대신 검사 결과(PASS·WARN·FAIL·N/A)만 표시</li><li>각 행은 테이블 상세의 품질 탭으로 연결</li><li>'도우미로 분석' 버튼 제공</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 모니터링 (16/20)</h2>
+<div class="figure shot"><img src="figures/screens/monitoring.png" alt="모니터링 화면"></div><table class="info small"><tr><th>화면 개요</th><td>Builder 상태와 최근 24시간 실행 현황을 확인하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>Builder 상태: API, 대기열, 작업자, 스냅샷 저장소</li><li>최근 24시간 실행 통계, 최근 갱신 목록</li><li>자동 새로 고침 체크박스, 수동 새로 고침 버튼</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>30초 간격으로 조회하며 탭이 보이지 않으면 중단</li><li>권한이 없으면 안내 한 줄만 표시</li><li>일부 값만 받지 못하면 저하 상태 배너 표시</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 연결 (17/20)</h2>
+<div class="figure shot"><img src="figures/screens/connections.png" alt="연결 화면"></div><table class="info small"><tr><th>화면 개요</th><td>공공데이터 제공 기관의 자격 증명을 관리하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>표: 제공 기관, 인증 방식, 설정 여부, 마지막 확인, 동작</li><li>선택한 기관의 자격 증명 패널, 키 확인, 활용 신청 안내</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>단일 사용자 배포: 키를 저장·삭제</li><li>다중 사용자 배포: 키를 이번 세션에만 사용 (메모리 보관)</li><li>키 원문은 화면에 표시하지 않음</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 설정 (18/20)</h2>
+<div class="figure shot"><img src="figures/screens/settings.png" alt="설정 화면"></div><table class="info small"><tr><th>화면 개요</th><td>Builder 연결과 계정, AI 키 상태를 확인하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>연결: Builder 주소와 계약 버전 확인</li><li>개인정보 안내, 계정, 제공 기관 자격 증명 요약</li><li>Ask KPubData 키(BYOK) 상태</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>Builder 계약 버전이 최소 요건(1.96.0)보다 낮으면 모든 화면에 경고 배너</li><li>AI 키는 기본적으로 메모리에만 보관</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — Ask KPubData (19/20)</h2>
+<table class="info small"><tr><th>화면 개요</th><td>현재 화면의 테이블·실행·품질 문맥으로 질문하고 다음 동작까지 이어 가는 AI 도우미</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>문맥 표시(테이블·실행·품질·단계), 추천 질문, 관련 데이터셋</li><li>답변, 근거 목록, 생성된 SQL(실행·복사), 제안 동작(승인·거절)</li><li>키 입력 폼: API 키, 모델, 주소</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>오른쪽 서랍으로 열리며 전체 화면(<code>/assistant</code>)도 제공</li><li>SQL은 사용자가 실행을 눌렀을 때만 Builder로 전달</li><li>문맥이 바뀐 뒤의 제안 동작은 실행할 수 없음을 표시</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">화면 설계서 — 관리 (20/20)</h2>
+<table class="info small"><tr><th>화면 개요</th><td>관리자가 운영 정책과 전체 실행, 가입 신청을 확인하는 화면</td></tr><tr><th>주요 UI 구성요소</th><td><ul><li>현재 적용 중인 정책</li><li>전체 사용자의 실행 목록 (메타데이터만)</li><li>가입 신청 목록: 승인, 거절</li></ul></td></tr><tr><th>상태·상호작용</th><td><ul><li>관리자에게만 메뉴 표시</li><li>카드별로 로딩·권한 없음·미지원·실패 상태를 따로 표시</li></ul></td></tr></table>
+</section>
+<section class="sheet break">
+<h2 class="bar">엔티티 관계도 - 핵심 도메인 모델</h2>
+<div class="figure mid"><img src="figures/entities.svg" alt="도메인 모델 클래스 다이어그램"></div><ul><li>BuildSpec은 실행 입력을 선언하는 계약이며 Python dataclass로 정의함</li><li>BuildManifest는 실행마다 한 건씩 남는 결과 기록임</li><li>관계형 스키마가 아니므로 UML 클래스 다이어그램 표기법으로 정리함</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">엔티티 관계도 - 저장 구조 (ERD)</h2>
+<div class="figure mid"><img src="figures/storage.svg" alt="SQLite 저장 구조 ERD"></div><ul><li>상태는 SQLite와 로컬 파일에만 보관함</li><li><code>builds</code>는 manifest.json과 종료 기록에서 다시 만들 수 있는 파생 인덱스임</li><li><code>tables</code>·<code>table_snapshots</code>는 웨어하우스 카탈로그이며 스냅샷 본문은 Parquet 파일임</li><li>주요 컬럼만 표시함</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">기능 처리도 - 테이블 만들기</h2>
+<div class="figure tall"><img src="figures/flow-create.svg" alt="테이블 만들기 처리도"></div><ul><li>사용자 조작(①⑦)은 Studio 안에서 처리되고, Builder API 호출은 미리보기·검증·존재 확인·제출 네 곳임</li><li>미리보기와 검증은 동시에 요청하며, 늦게 도착한 이전 응답은 버림</li><li>제출 직전에 같은 이름의 테이블이 있는지 다시 확인하고, 결과가 달라졌으면 제출하지 않음</li><li>마법사는 완료를 기다리지 않고 실행 상세로 넘어가며, 진행은 실행 상세가 따라감</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">기능 처리도 - 실행 검토·재실행</h2>
+<div class="figure tall"><img src="figures/flow-rerun.svg" alt="실행 검토와 재실행 처리도"></div><ul><li>실행 상세는 단계·품질·이벤트·명세를 따로 조회해 한 영역의 실패가 전체를 막지 않게 함</li><li>실패하거나 취소된 실행을 다시 돌릴 때만 <code>retry_of</code>를 보내며, 수집 체크포인트를 이어받음</li><li>성공한 실행을 다시 돌리는 것은 갱신이며 새 스냅샷을 만듦</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">기능 처리도 - 게시</h2>
+<div class="figure tall"><img src="figures/flow-publish.svg" alt="게시 처리도"></div><ul><li>게시 전 준비 상태를 조회해 라이선스, 개인정보 검사, 카드 누락 등 차단 사유를 먼저 표시</li><li>Studio의 게시 대상은 Hugging Face이며, Builder CLI는 로컬·Kaggle 게시도 지원</li><li>게시 요청은 자동 재시도하지 않으며, 결과가 불명확하면 대조 또는 영수증 초기화로 복구</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">기능 처리도 - 오류 처리</h2>
+<div class="figure "><img src="figures/flow-error.svg" alt="오류 처리 흐름"></div><ul><li>① 명세 검증 오류 — 문제 목록을 표시하고 수정 전까지 실행을 막음</li><li>② 연결 실패 — 30초 제한과 최대 2회 재시도 후 오류 상태와 다시 시도 버튼 표시. 미리보기·제출·게시·쿼리는 재시도하지 않음</li><li>③ 인증 만료 — 토큰을 갱신해 같은 요청을 한 번 다시 보내고, 실패하면 로그인 화면으로 이동</li><li>④ 실행 실패 — 실행 상세에서 실패 단계와 코드를 확인하고 명세를 고쳐 재실행</li><li>오프라인 모드나 자동 재연결은 두지 않음. 주기적 조회가 돌아오면 화면이 갱신됨</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">기능 처리도 - Ask KPubData 응답 처리</h2>
+<div class="figure "><img src="figures/flow-assistant.svg" alt="AI 응답 처리 흐름"></div><ul><li>프롬프트 역할 분리: 고정 지시(system), 신뢰하지 않는 근거(evidence), 사용자 질문을 구분해 전달</li><li>전송 전 비밀값 제거: 키·토큰 이름의 필드, <code>key=value</code> 형태, 무작위성이 높은 긴 문자열을 자리표시자로 치환</li><li>4단계 검증: ① Zod 구조 검증 → ② 근거 대조 → ③ Builder 검증 → ④ 사용자 승인</li><li>SQL 안전성 검사는 Studio가 아니라 Builder의 읽기 전용 검사가 담당</li><li>허용 동작 6종: OPEN_PROVIDER, OPEN_BUILD, OPEN_QUALITY, PATCH_BUILDSPEC, CREATE_BUILD_DRAFT, ADD_REPORT_BLOCK</li><li>실행 시작, 게시, 자격 증명 변경, SQL 자동 실행은 제안할 수 없음</li><li>LLM 키는 사용자가 직접 입력(BYOK)하며 기본적으로 메모리에만 보관</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">알고리즘 명세서</h2>
+<div class="figure tall"><img src="figures/algorithm.svg" alt="run_build 알고리즘"></div>
+</section>
+<section class="sheet break">
+<h2 class="bar">알고리즘 명세서</h2>
+<ul><li>① <code>run_build()</code>가 BuildSpec을 받아 <code>validate_spec()</code>으로 먼저 검증. 위반이 있으면 <code>ValidationError</code>로 끝나며 작업공간도 기록도 만들지 않음</li><li>② <code>BuildContext.create()</code>로 실행 작업공간을 만들고 명세 스냅샷(buildspec.yaml)과 <code>spec_digest</code> 기록</li><li>③ 소스를 스레드 풀로 병렬 실행 (최대 4개). 결과는 명세에 적힌 순서대로 모음</li><li>④ 소스마다 Bronze → Silver → Gold → Export 순으로 진행. 단계 경계마다 취소 여부 확인</li><li>⑤ Silver에서 스키마 검증, 개인정보 검사, 품질 검사를 통과해야 Gold로 넘어감</li><li>⑥ composition을 선언했으면 두 소스의 Silver를 조인해 하나의 Gold 생성</li><li>⑦ 상태 판정: 취소되었으면 cancelled, 오류가 하나라도 있으면 failed, 아니면 ok</li><li>⑧ 상태가 ok일 때만 Gold를 웨어하우스 스냅샷으로 커밋. 시작 시점의 revision과 비교해 충돌하면 거부</li><li>⑨ manifest.json을 기록하고 <code>BuildResult(status, outcomes, manifest_path, …)</code> 반환</li></ul><h3>상태값</h3><div class="tablewrap"><table class="small"><tr><th style="width:42mm">계층</th><th>값</th><th style="width:60mm">비고</th></tr><tr><td class="c">오케스트레이터·Manifest</td><td><code>ok</code> · <code>failed</code> · <code>cancelled</code></td><td>실행 결과의 원본 값</td></tr><tr><td class="c">HTTP API 작업 상태</td><td><code>queued</code> · <code>running</code> · <code>cancelling</code> · <code>succeeded</code> · <code>failed</code> · <code>cancelled</code></td><td><code>ok</code>는 <code>succeeded</code>로 표시. 테이블 커밋이 실패하면 <code>failed</code></td></tr><tr><td class="c">품질 검사</td><td><code>pass</code> · <code>warn</code> · <code>fail</code></td><td>평가하지 못한 규칙은 결과에서 제외</td></tr></table></div><h3>Manifest가 남지 않는 경우</h3><ul><li>명세 검증에서 거부된 요청: 실행 자체가 시작되지 않음</li><li>대기 중 취소, 서버 재시작 등으로 파이프라인에 들어가기 전에 끝난 비동기 실행: <code>run_endings</code> 표에 종료 기록으로 남김</li><li>파이프라인에 들어간 뒤 취소된 실행은 <code>status=cancelled</code>, <code>partial=true</code>로 Manifest를 남김</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">데이터 수집처리 정의서</h2>
+<p>○ Medallion 구조 기반 수집·처리 — Bronze / Silver / Gold 3단계 + Export</p><div class="figure low"><img src="figures/pipeline.svg" alt="데이터 수집·처리 흐름"></div><div class="tablewrap"><table class="small"><tr><th style="width:20mm">단계</th><th style="width:66mm">처리 내용</th><th style="width:30mm">사용 기술</th><th>입력 → 출력</th></tr><tr><td class="c">Bronze<br>(원천 수집)</td><td>공공 API·업로드 파일·URL의 원본을 그대로 수집. 수집 시각·파라미터·건수·체크섬 기록. 파라미터 조합별 체크포인트</td><td>kpubdata, URL 수집기</td><td>외부 원본 → <code>bronze/{source}/raw_records.jsonl</code>, <code>metadata.json</code></td></tr><tr><td class="c">Silver<br>(정제·검증)</td><td>명세에 선언한 규칙만 적용: 결측 토큰 → 컬럼 병합 → 이름 변경 → 자리 채움 → 형 변환 → 파생 컬럼. 필수 컬럼·자료형 검증, 통계·미리보기 생성, 개인정보·품질 검사</td><td>DuckDB</td><td>Bronze → <code>silver/{source}/table.parquet</code>, <code>schema.json</code>, <code>stats.json</code>, <code>validation.json</code></td></tr><tr><td class="c">Gold<br>(패키징)</td><td>행 필터와 컬럼 선택, 선언한 개인정보 컬럼 마스킹, 분할, 두 소스 조인</td><td>DuckDB</td><td>Silver → <code>gold/{name}/table.parquet</code>, <code>package.json</code>, <code>splits/*.parquet</code></td></tr><tr><td class="c">Export<br>(내보내기)</td><td>Gold를 exports 설정에 맞춰 파일로 저장하고 데이터셋 카드 생성</td><td>Exporter (csv·jsonl·parquet·markdown·huggingface·kaggle)</td><td>Gold → 산출물 파일, <code>README.md</code>, <code>card.json</code></td></tr><tr><td class="c">웨어하우스 커밋</td><td>상태가 ok인 실행의 Gold를 읽기 전용 스냅샷으로 커밋. 최근 3개 유지</td><td>SQLite 카탈로그, Parquet</td><td>Gold → <code>tables/{id}/snapshots/{id}/</code></td></tr></table></div><ul><li>주요 선언 항목: 수집 파라미터(params·param_grid), 정규화 규칙(schema), 품질 기준(quality), 분할(splits), 내보내기(exports)</li><li>Silver는 행과 컬럼을 모두 보존하고, 선택과 필터는 Gold에서만 수행</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">프로그램 목록 - KPubData Builder</h2>
+<div class="tablewrap"><table class="small"><tr><th style="width:24mm">기능ID</th><th style="width:62mm">패키지·모듈</th><th>역할</th></tr><tr><td class="c">A02_B01~02</td><td><code>spec/</code></td><td>BuildSpec 모델, 로더, 검증기, 스냅샷, 지문</td></tr><tr><td class="c">A02·A03</td><td><code>pipeline/</code></td><td>오케스트레이터(<code>run_build</code>), 실행 문맥, 취소, 미리보기, 내보내기</td></tr><tr><td class="c">A01_B01~02</td><td><code>stages/bronze/</code>, <code>ingestion/</code></td><td>소스 수집, 체크포인트, 파일·URL 읽기</td></tr><tr><td class="c">A02_B05~06</td><td><code>stages/silver/</code>, <code>quality/</code>, <code>tabular/</code></td><td>DuckDB 정규화, 검증, 통계, 개인정보 검사, 스키마 변화 감지, 품질 평가</td></tr><tr><td class="c">A02_B07</td><td><code>stages/gold/</code></td><td>선택, 마스킹, 분할, 조인, 카드</td></tr><tr><td class="c">A03_B02</td><td><code>exporters/</code></td><td>csv, jsonl, parquet, markdown, huggingface, kaggle</td></tr><tr><td class="c">A03_B05</td><td><code>publishers/</code></td><td>local, huggingface, kaggle</td></tr><tr><td class="c">A03_B03</td><td><code>manifest/</code>, <code>events/</code></td><td>Manifest 모델·기록, 실행 이벤트와 종료 기록</td></tr><tr><td class="c">A03_B04</td><td><code>warehouse/</code></td><td>테이블 카탈로그, 스냅샷 커밋·정리·백업</td></tr><tr><td class="c">A06_B03</td><td><code>query/</code></td><td>읽기 전용 SQL 검사, 격리 실행, 집계, 프로파일</td></tr><tr><td class="c">A04·A08</td><td><code>service/</code></td><td>HTTP 서비스, 경로, 인증, 비동기 작업, 게시, 모니터링, 관리</td></tr><tr><td class="c">A06_B04</td><td><code>credentials/</code>, <code>uploads/</code></td><td>자격 증명 암호화 저장, 업로드 파일 저장</td></tr><tr><td class="c">-</td><td><code>store/</code></td><td>빌드 인덱스, 상태 목록, 백업</td></tr><tr><td class="c">A01_B04</td><td><code>agent/</code>, <code>verify/</code></td><td>신규 데이터셋 탐색·승인 확인, 명세 실검증</td></tr><tr><td class="c">-</td><td><code>cli.py</code></td><td>명령줄 진입점 (validate, preview, build, publish, serve 등)</td></tr></table></div><h3>주요 CLI 명령</h3><div class="tablewrap"><table class="small"><tr><th style="width:70mm">명령</th><th>용도</th></tr><tr><td><code>validate</code> · <code>preview</code> · <code>build</code></td><td>명세 검증, 저장 없는 미리보기, 파이프라인 실행</td></tr><tr><td><code>publish</code></td><td>산출물을 로컬 또는 원격 대상으로 게시</td></tr><tr><td><code>serve</code></td><td>Builder HTTP 서비스 실행</td></tr><tr><td><code>rebuild-index</code> · <code>backup</code> · <code>restore</code></td><td>인덱스 재구성, 상태 백업과 복원</td></tr><tr><td><code>warehouse-gc</code> · <code>warehouse-backup</code></td><td>스냅샷 정리와 백업</td></tr><tr><td><code>prune-runs</code> · <code>prune-cancelled</code></td><td>보존 기간이 지난 실행 정리</td></tr></table></div>
+</section>
+<section class="sheet break">
+<h2 class="bar">프로그램 목록 - KPubData Studio</h2>
+<div class="tablewrap"><table class="small"><tr><th style="width:22mm">기능ID</th><th style="width:74mm">디렉터리</th><th>역할</th></tr><tr><td class="c">A04_B01</td><td><code>features/home</code>, <code>onboarding</code></td><td>홈 데이터, 첫 실행 체크리스트</td></tr><tr><td class="c">A04_B02</td><td><code>features/discover</code>, <code>add-data</code>, <code>preview</code>, <code>validation</code></td><td>카탈로그, 테이블 만들기 마법사, 미리보기·검증 클라이언트</td></tr><tr><td class="c">A04_B02</td><td><code>features/build-spec</code></td><td>BuildSpec 변환, YAML, 초안, 비교, 개정 이력</td></tr><tr><td class="c">A04_B03</td><td><code>features/datasets</code>, <code>data-table</code></td><td>테이블 목록·상세, 공통 표, 행 조회</td></tr><tr><td class="c">A04_B04</td><td><code>features/sql</code>, <code>charts</code>, <code>export</code></td><td>SQL 실행, 저장된 분석, 집계 차트, 결과 내보내기</td></tr><tr><td class="c">A04_B05</td><td><code>features/reports</code>, <code>workspace</code></td><td>리포트 저장·편집·내보내기, 최근 작업</td></tr><tr><td class="c">A04_B06</td><td><code>features/runs</code>, <code>artifacts</code>, <code>publish</code></td><td>비동기 실행과 상태 조회, 산출물, 게시</td></tr><tr><td class="c">A04_B07</td><td><code>features/provider</code>, <code>version-check</code></td><td>연결 관리, Builder 버전 비교</td></tr><tr><td class="c">A06_B02</td><td><code>features/licence</code></td><td>이용 조건 요약</td></tr><tr><td class="c">A06_B04</td><td><code>features/auth</code></td><td>Keycloak 연동, 토큰 갱신, 로그인 보호</td></tr><tr><td class="c">A07_B01</td><td><code>features/assistant</code></td><td>Ask KPubData: 프롬프트, 구조 검증, 근거 대조, 동작, 비밀값 제거</td></tr><tr><td class="c">A08</td><td><code>features/monitoring</code>, <code>quality</code>, <code>admin</code></td><td>모니터링, 품질 센터, 관리</td></tr><tr><td class="c">-</td><td><code>shared/lib/builderApi.ts</code></td><td>Builder API 클라이언트. 모든 응답을 Zod 스키마로 검증</td></tr><tr><td class="c">-</td><td><code>pages/</code>, <code>app/</code></td><td>화면 23종, 라우터, 공통 레이아웃</td></tr></table></div><h3>개발 스택</h3><div class="tablewrap"><table class="small"><tr><th style="width:24mm">구분</th><th>내용</th></tr><tr><td class="c">Builder</td><td>Python 3.10~3.13, DuckDB, Parquet(pyarrow), SQLite, sqlglot</td></tr><tr><td class="c">Studio</td><td>React 19, TypeScript 6, Vite 8, React Router 7, Zustand 5, Tailwind CSS 4, Zod 4, i18next (한국어·영어)</td></tr><tr><td class="c">인증</td><td>Keycloak (OIDC Authorization Code + PKCE), keycloak-js</td></tr><tr><td class="c">테스트</td><td>Builder: pytest, ruff, mypy / Studio: Vitest, Playwright, axe-core</td></tr><tr><td class="c">배포</td><td>Docker 이미지, GitHub Actions</td></tr></table></div>
+</section>
+<section class="sheet break">
+<h2 class="bar">테이블 정의서 - BuildSpec</h2>
+<p>○ BuildSpec 필드 구조 (dataset_id / title / description / sources[] 는 필수)</p><div class="tablewrap"><table class="small"><tr><th style="width:18mm">필수/선택</th><th style="width:50mm">필드명</th><th style="width:36mm">타입</th><th>설명</th></tr><tr><td class="c">필수</td><td><code>dataset_id</code></td><td>string</td><td>데이터셋 식별자</td></tr><tr><td class="c">필수</td><td><code>title</code></td><td>string</td><td>사람이 읽는 제목</td></tr><tr><td class="c">필수</td><td><code>description</code></td><td>string</td><td>목적과 데이터 설명</td></tr><tr><td class="c">필수</td><td><code>sources[]</code></td><td>array&lt;SourceRef&gt;</td><td>입력 소스 (1개 이상)</td></tr><tr><td class="c">선택</td><td><code>exports[]</code></td><td>array&lt;ExportTarget&gt;</td><td>내보내기 대상 (kind·output_path·options). 비워 두면 테이블 커밋까지만 수행</td></tr><tr><td class="c">선택</td><td><code>splits</code></td><td>SplitSpec</td><td>분할 정의 (mode: ratio | key, ratios, key, seed)</td></tr><tr><td class="c">선택</td><td><code>quality</code></td><td>QualityPolicy</td><td>품질 기준 (중복률, 결측률, 최소 행 수, 값 범위, 컬럼 비교)</td></tr><tr><td class="c">선택</td><td><code>pii</code></td><td>PiiPolicy</td><td>개인정보 검사 정책 (mode: block | warn | allow)</td></tr><tr><td class="c">선택</td><td><code>composition</code></td><td>CompositionSpec</td><td>두 소스를 조인해 하나의 Gold 생성</td></tr><tr><td class="c">선택</td><td><code>license</code> · <code>license_name</code> · <code>license_link</code> · <code>attribution</code></td><td>string</td><td>라이선스와 출처 표기. 게시할 때 license 필수</td></tr><tr><td class="c">선택</td><td><code>publish</code></td><td>boolean</td><td>실행 후 게시 여부 (기본 false)</td></tr><tr><td class="c">선택</td><td><code>refresh_cadence</code></td><td>string</td><td>갱신 주기 (ISO-8601 기간, 예: P1D). 갱신 지연 판정에 사용</td></tr><tr><td class="c">선택</td><td><code>metadata</code></td><td>object</td><td>산출물에 실을 임의 메타데이터</td></tr></table></div><ul><li>※ DB 테이블이 아닌 실행 계약의 필드 구조를 테이블 정의서 형식으로 정리함 (출처: <code>spec/models.py</code>)</li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">테이블 정의서 - SourceRef</h2>
+<p>○ SourceRef 필드 구조 — BuildSpec의 sources[] 항목</p><div class="tablewrap"><table class="small"><tr><th style="width:58mm">필드명</th><th style="width:30mm">타입</th><th>설명</th></tr><tr><td><code>kind</code></td><td>string</td><td>소스 종류: public_api(기본) | file | url</td></tr><tr><td><code>provider</code> · <code>dataset</code></td><td>string</td><td>kpubdata 제공 기관과 데이터셋 (public_api에서 필수)</td></tr><tr><td><code>params</code> · <code>param_grid</code></td><td>object</td><td>수집 파라미터, 조합별로 수집할 파라미터 축</td></tr><tr><td><code>alias</code></td><td>string</td><td>출력 키 이름. 조인에서 참조</td></tr><tr><td><code>schema</code></td><td>SchemaContract</td><td>정규화·검증 계약 (required, dtypes, casts, rename, derived, null_tokens, coalesce, zfill)</td></tr><tr><td><code>gold</code></td><td>GoldSelection</td><td>Gold에 남길 컬럼과 행 (select, filters, pii_columns)</td></tr><tr><td><code>upload_id</code> · <code>format</code> · <code>encoding</code></td><td>string</td><td>파일 소스: 업로드 식별자, 형식(csv·json·jsonl·parquet), 인코딩</td></tr><tr><td><code>endpoint</code> · <code>method</code></td><td>string</td><td>URL 소스: 주소(HTTPS), 메서드(GET만 허용)</td></tr><tr><td><code>allow_empty</code></td><td>boolean</td><td>0행 결과가 기존 테이블을 대체하도록 허용할지 여부</td></tr></table></div><p>○ SchemaContract 적용 순서</p><ul><li>read_as → null_tokens → coalesce → rename → zfill → casts → derived</li><li>형 변환에서 값이 사라지면 오류로 처리하며, 선언하지 않은 변환은 수행하지 않음</li></ul><ul><li>※ 출처: <code>spec/models.py</code></li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">테이블 정의서 - BuildManifest</h2>
+<p>○ BuildManifest 필드 구조 — 파이프라인에 들어간 실행마다 1건 생성 (schema_version 1.0.0)</p><div class="tablewrap"><table class="small"><tr><th style="width:52mm">필드명</th><th style="width:44mm">타입</th><th>설명</th></tr><tr><td><code>build_id</code></td><td>string</td><td>실행 식별자</td></tr><tr><td><code>started_at</code> / <code>finished_at</code></td><td>datetime</td><td>실행 시작·종료 시각</td></tr><tr><td><code>status</code> · <code>partial</code></td><td>string · bool</td><td>ok | failed | cancelled. partial은 취소된 실행에서만 true</td></tr><tr><td><code>inputs</code> / <code>outputs</code></td><td>tuple&lt;string&gt;</td><td>소스 출력 키 목록 / 생성된 산출물 경로 목록</td></tr><tr><td><code>warnings</code> / <code>errors</code></td><td>tuple&lt;string&gt;</td><td>경고 / 실패 메시지</td></tr><tr><td><code>failures</code></td><td>tuple&lt;RunFailure&gt;</td><td>실패 내역 (소스, 단계, 코드, 요약)</td></tr><tr><td><code>row_counts</code></td><td>dict&lt;str,int&gt;</td><td>소스·조인별 Silver 행 수</td></tr><tr><td><code>schema_summaries</code></td><td>dict&lt;str,SchemaSummary&gt;</td><td>소스별 스키마 요약</td></tr><tr><td><code>provenance</code></td><td>tuple&lt;SourceProvenance&gt;</td><td>소스별 수집 시각, 파라미터, 레코드 수, 체크섬</td></tr><tr><td><code>quality_results</code></td><td>dict</td><td>평가한 품질 검사 결과 (pass 포함)</td></tr><tr><td><code>schema_drift</code></td><td>dict</td><td>이전 실행 대비 스키마·행 수 변화</td></tr><tr><td><code>gold_selection</code> · <code>pii_masking</code></td><td>dict</td><td>Gold 선택 규칙과 행 수, 마스킹한 컬럼</td></tr><tr><td><code>composition</code></td><td>CompositionProvenance</td><td>조인 내역</td></tr><tr><td><code>warehouse_failures</code></td><td>dict</td><td>커밋에 실패한 테이블과 사유</td></tr><tr><td><code>build_environment</code></td><td>BuildEnvironment</td><td>Python·kpubdata·Builder 버전</td></tr><tr><td><code>inputs_fingerprint</code></td><td>string | None</td><td>입력 데이터 지문 (sha256:…)</td></tr><tr><td><code>artifacts</code></td><td>dict</td><td>Gold 디렉터리별 산출물 다이제스트</td></tr><tr><td><code>created_by</code> · <code>retry_of</code></td><td>string | None</td><td>요청자 표시 이름, 재시도 대상 실행</td></tr></table></div><ul><li>※ 출처: <code>manifest/models.py</code></li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">테이블 정의서 - 저장 인덱스</h2>
+<p>○ builds 표 (SQLite 인덱스, <code>_builds.sqlite</code>)</p><div class="tablewrap"><table class="small"><tr><th style="width:62mm">컬럼</th><th style="width:30mm">타입</th><th>설명</th></tr><tr><td><code>run_id</code></td><td>TEXT PK</td><td>실행 식별자</td></tr><tr><td><code>status</code></td><td>TEXT NOT NULL</td><td>ok | failed | cancelled (CHECK 제약)</td></tr><tr><td><code>started_at</code> · <code>finished_at</code></td><td>TEXT</td><td>시작·종료 시각. finished_at 내림차순 인덱스</td></tr><tr><td><code>spec_digest</code></td><td>TEXT</td><td>명세 다이제스트</td></tr><tr><td><code>dataset_id</code></td><td>TEXT</td><td>데이터셋 식별자 (인덱스)</td></tr><tr><td><code>created_by</code> · <code>owner_id</code></td><td>TEXT</td><td>요청자, 소유자</td></tr><tr><td><code>error</code> · <code>error_code</code> · <code>error_stage</code></td><td>TEXT</td><td>실패 요약, 코드, 단계</td></tr></table></div><p>○ SQLite 저장소 목록</p><div class="tablewrap"><table class="small"><tr><th style="width:58mm">파일</th><th style="width:58mm">표</th><th>용도</th></tr><tr><td><code>_builds.sqlite</code></td><td>builds</td><td>실행 인덱스 (Manifest에서 재구성 가능)</td></tr><tr><td><code>_build_events.sqlite</code></td><td>build_events, run_submissions, run_endings</td><td>실행 이벤트, 제출 기록, Manifest 없이 끝난 실행의 종료 기록</td></tr><tr><td><code>_warehouse.sqlite</code></td><td>tables, table_snapshots, snapshot_leases, snapshot_holds</td><td>웨어하우스 카탈로그와 스냅샷 보존</td></tr><tr><td><code>_publish_receipts.sqlite</code></td><td>publish_receipts, publish_receipt_audit</td><td>게시 영수증과 감사 기록</td></tr><tr><td><code>.service/analyses.sqlite3</code></td><td>analyses</td><td>저장된 분석</td></tr><tr><td><code>.service/revisions.sqlite3</code></td><td>revisions, revision_audit</td><td>명세·주석 개정 이력</td></tr><tr><td><code>.service/uploads.sqlite3</code></td><td>uploads</td><td>업로드 파일 메타데이터</td></tr><tr><td><code>.service/provider-credentials.sqlite3</code></td><td>provider_credentials</td><td>제공 기관 자격 증명 (암호화)</td></tr><tr><td><code>.service/users.sqlite3</code></td><td>users</td><td>가입 신청 원장</td></tr></table></div><ul><li>※ 출처: <code>store/build_index.py</code>, <code>store/inventory.py</code></li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">핵심 소스코드(1) — kpubdata-builder · run_build()</h2>
+<pre>def run_build(spec: BuildSpec, *, client: SourceClient, output_root: Path,
+              run_id: str | None = None, retry_of: str | None = None,
+              catalog: TableCatalog | None = None, ...) -&gt; BuildResult:
+    validate_spec(spec)                                  # 위반 시 ValidationError, 기록 없음
+    context = BuildContext.create(spec, output_root=output_root, run_id=run_id)
+    ...
+    # Per-source fetch/stage mostly waits on network I/O, so concurrent
+    # execution via thread pool reduces total time (#247). executor.map
+    # returns results in spec.sources order, not completion order, so
+    # downstream merge (manifest) stays deterministic.
+    max_workers = min(len(spec.sources), _MAX_PARALLEL_SOURCES)
+    clear_temp_root(context.output_root / context.run_id)
+    try:
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            results = list(executor.map(_worker, spec.sources))
+    ...
+    if cancelled:
+        status = &quot;cancelled&quot;
+    elif errors:
+        status = &quot;failed&quot;
+        recorder.run_failed(failed_source_count=len(errors))
+    else:
+        status = &quot;ok&quot;
+        recorder.run_finished()
+    ...                                                  # ok일 때 웨어하우스 커밋, manifest.json 기록</pre><ul><li>BuildSpec을 검증한 뒤 실행 작업공간을 만들고, 소스별 Bronze→Silver→Gold 파이프라인을 병렬로 실행해 상태를 판정하는 핵심 로직</li><li>결과는 명세 순서대로 모아 Manifest가 실행마다 같은 순서로 기록되게 함</li><li><code>...</code>은 생략한 부분. 원본: <code>src/kpubdata_builder/pipeline/orchestrator.py</code></li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">핵심 소스코드(2) — kpubdata-builder · validate_spec()</h2>
+<pre>def validate_spec(spec: BuildSpec) -&gt; None:
+    &quot;&quot;&quot;Validate BuildSpec minimum executability.
+
+    Raises:
+        ValidationError: When one or more validation rules fail.
+    &quot;&quot;&quot;
+    problems: list[ValidationProblem] = []
+    if not spec.dataset_id.strip():
+        problems.append(_p(&quot;empty_field&quot;, &quot;dataset_id&quot;, &quot;dataset_id must be a non-empty string&quot;))
+    if not spec.title.strip():
+        problems.append(_p(&quot;empty_field&quot;, &quot;title&quot;, &quot;title must be a non-empty string&quot;))
+    if not spec.description.strip():
+        problems.append(_p(&quot;empty_field&quot;, &quot;description&quot;, &quot;description must be a non-empty string&quot;))
+    if not spec.sources:
+        problems.append(_p(&quot;missing_sources&quot;, &quot;sources&quot;, &quot;at least one source is required&quot;))
+    ...
+    # exports may be empty (#703). A build with none ends at a committed table,
+    # which is a complete job — publishing is an explicit follow-up, not the only
+    # way to finish.
+    ...
+    problems.extend(_split_problems(spec))
+    problems.extend(_schema_problems(spec))
+    problems.extend(_source_kind_problems(spec))
+    problems.extend(_source_key_problems(spec))
+    problems.extend(_param_grid_problems(spec))
+    problems.extend(_pii_problems(spec))
+    problems.extend(_license_problems(spec))
+    problems.extend(_quality_problems(spec))
+    problems.extend(_composition_problems(spec))
+    problems.extend(_gold_selection_problems(spec))
+    if problems:
+        raise ValidationError([str(p) for p in problems], structured=problems)</pre><ul><li>실행 자원을 만들기 전에 명세의 문제를 모두 모아 한 번에 알려 주는 사전 검증 로직</li><li>반환값은 없으며, 문제가 있으면 code·path·message·hint를 담은 <code>ValidationError</code> 발생</li><li><code>exports</code>는 비어 있어도 되며, 이 경우 테이블 커밋까지만 수행</li><li><code>...</code>은 생략한 부분. 원본: <code>src/kpubdata_builder/spec/validator.py</code></li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">핵심 소스코드(3) — kpubdata-studio · 근거 대조</h2>
+<pre>export function crossCheckAssistantResponse(
+  response: AssistantStructuredResponse,
+  evidence: AssistantEvidence,
+  knownRefs: AssistantKnownRefs,
+): CrossCheckResult {
+  const rejectedRefs: string[] = [];
+  const evidenceRefs = response.evidenceRefs.filter((ref) =&gt; {
+    const known = isKnownEvidenceRef(ref, knownRefs, evidence);
+    if (!known) rejectedRefs.push(`${ref.kind}:${ref.id} (${ref.label})`);
+    return known;
+  });
+
+  const rejectedActions: string[] = [];
+  const suggestedActions = response.suggestedActions.filter((action) =&gt; {
+    const check = isKnownAction(action, knownRefs, evidence);
+    if (!check.ok) rejectedActions.push(check.reason);
+    return check.ok;
+  });
+
+  let generatedSql = response.generatedSql;
+  let rejectedSqlReason: string | undefined;
+  if (generatedSql) {
+    if (evidence.context.stage !== generatedSql.stage) {
+      rejectedSqlReason = t(&quot;sqlStageMismatch&quot;, { ... });
+      generatedSql = null;
+    } else if (generatedSql.source &amp;&amp; !knownRefs.sourceKeys.has(generatedSql.source)) {
+      ...                                                // 소스가 하나면 소스 지정만 제거, 여럿이면 SQL 폐기
+    }
+  }
+  ...
+}</pre><ul><li>LLM 답변이 인용한 근거·제안 동작·SQL을 Builder에서 받은 실제 근거와 대조하는 로직</li><li>근거에 없는 항목은 그 항목만 버리고 나머지 답변은 유지</li><li>SQL은 현재 단계·소스와 맞지 않으면 버리며, 실행 전 최종 검사는 Builder가 수행</li><li><code>...</code>은 생략한 부분. 원본: <code>src/features/assistant/crossCheck.ts</code></li></ul>
+</section>
+<section class="sheet break">
+<h2 class="bar">참고</h2>
+<ul><li>KPubData Builder 기준 코드: <a href="https://github.com/kpubdata-lab/kpubdata-builder/blob/0539bca346e3f1fb046a5808a607559bfc0063bd/ARCHITECTURE.md">0539bca</a> (2026-10-12, API 계약 1.123.0)</li><li>KPubData Studio 기준 코드: <a href="https://github.com/kpubdata-lab/kpubdata-studio/blob/08e3e8aec189dfce14fdba7bb002b1a0167bc401/docs/INFORMATION_ARCHITECTURE.md">08e3e8a</a> (2026-10-12, 버전 0.4.0)</li><li>화면 그림은 Studio를 데모 모드로 실행해 캡처한 것으로, 표시된 값은 데모 데이터임</li><li>기술 설명별 코드 근거: <a href="evidence.md">근거 목록</a></li><li>2026. 09. 08 판 대비 변경 사항: <a href="design-update-notes.md">제작설계서 변경 내역</a></li></ul>
+</section>
+
+</body>
+</html>

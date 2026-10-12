@@ -1,0 +1,18 @@
+sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant P as 게시 화면 (/refresh-jobs/:id/publish)
+    participant B as Builder API
+    participant H as Hugging Face
+    U->>P: 실행 상세 또는 스냅샷 탭에서 게시 진입
+    P->>B: GET /builds/{id}/publish/readiness
+    B-->>P: 차단 사유 · 경고 (라이선스 · 개인정보 검사 · 카드 누락)
+    U->>P: 데이터 카드 확인, 대상 저장소(owner/dataset) · 비공개 여부 입력
+    U->>P: 게시 확인
+    P->>B: POST /builds/{id}/publish
+    B->>H: 산출물 업로드
+    H-->>B: 결과
+    B-->>P: published · failed · 상태 불명
+    opt 상태 불명
+        P->>B: POST /publish/reconcile 또는 DELETE /publish/receipt
+    end

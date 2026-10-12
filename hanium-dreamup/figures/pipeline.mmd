@@ -1,0 +1,10 @@
+flowchart LR
+    SRC[/"소스<br/>공공 API · 업로드 파일 · URL"/] --> BR
+    subgraph RUN["실행 작업공간 {output}/{run_id}/"]
+        BR["Bronze<br/>raw_records.jsonl<br/>metadata.json"] --> SV["Silver<br/>table.parquet · schema.json<br/>stats.json · validation.json"]
+        SV --> GD["Gold<br/>table.parquet · package.json<br/>splits/*.parquet"]
+        GD --> EX["Export<br/>CSV · JSONL · Parquet · Markdown<br/>README.md · card.json"]
+        GD --> MF["manifest.json"]
+    end
+    GD -->|상태 ok일 때 커밋| WH[("웨어하우스<br/>tables/{id}/snapshots/{id}")]
+    EX -->|선택| PB(["게시<br/>local · Hugging Face · Kaggle"])
