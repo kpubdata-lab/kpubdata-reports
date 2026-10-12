@@ -1,9 +1,15 @@
 sequenceDiagram
     autonumber
     actor U as 사용자
-    participant P as 게시 화면 (/refresh-jobs/:id/publish)
-    participant B as Builder API
-    participant H as Hugging Face
+    box rgb(234,240,252) Studio
+        participant P as 게시 화면 (/refresh-jobs/:id/publish)
+    end
+    box rgb(231,245,240) Builder
+        participant B as Builder API
+    end
+    box rgb(241,243,246) 외부
+        participant H as Hugging Face
+    end
     U->>P: 실행 상세 또는 스냅샷 탭에서 게시 진입
     P->>B: GET /builds/{id}/publish/readiness
     B-->>P: 차단 사유 · 경고 (라이선스 · 개인정보 검사 · 카드 누락)

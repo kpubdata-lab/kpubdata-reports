@@ -1,9 +1,13 @@
 sequenceDiagram
     autonumber
     actor U as 사용자
-    participant W as 테이블 만들기 마법사 (/add)
-    participant B as Builder API
-    participant R as 실행 상세 (/refresh-jobs/:id)
+    box rgb(234,240,252) Studio
+        participant W as 테이블 만들기 마법사 (/add)
+        participant R as 실행 상세 (/refresh-jobs/:id)
+    end
+    box rgb(231,245,240) Builder
+        participant B as Builder API
+    end
     U->>W: ① 구성 · 소스 종류와 파라미터 입력
     W->>W: 로컬 사전 점검 (명세 조립 · 자격 증명 · 필수 파라미터)
     par 미리보기와 검증을 동시에 요청

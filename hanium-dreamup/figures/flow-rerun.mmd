@@ -1,10 +1,14 @@
 sequenceDiagram
     autonumber
     actor U as 사용자
-    participant H as 갱신 이력 (/refresh-jobs)
-    participant D as 실행 상세
-    participant E as 명세 편집 (/refresh-jobs/:id/edit)
-    participant B as Builder API
+    box rgb(234,240,252) Studio
+        participant H as 갱신 이력 (/refresh-jobs)
+        participant D as 실행 상세
+        participant E as 명세 편집 (/refresh-jobs/:id/edit)
+    end
+    box rgb(231,245,240) Builder
+        participant B as Builder API
+    end
     U->>H: 실행 목록 확인 · 검색 · 상태 필터
     H->>B: GET /builds?limit=
     U->>D: 실행 선택
