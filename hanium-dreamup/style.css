@@ -76,5 +76,7 @@ table.perf td { height: 7mm; }
   .tablewrap { overflow-x: auto; }
 }
 .figure.mid img { max-height: 185mm; }
-.figure.low img { max-height: 30mm; }
+.figure.low img { max-height: 56mm; }
 .figure.shot.two img { max-height: 60mm; }
+.figure.m70 img { max-height: 76mm; }
+table.fixed { table-layout: fixed; }

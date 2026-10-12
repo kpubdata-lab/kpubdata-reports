@@ -1,11 +1,22 @@
 flowchart TB
-    Q[사용자 질문] --> EV[근거 수집<br/>Builder 카탈로그 · 테이블 · 실행]
-    EV --> SC[비밀값 제거 후 LLM 호출<br/>system · evidence · question 역할 분리]
-    SC --> G1
-    subgraph GATE[응답 검증 4단계]
+    Q([사용자 질문]):::user --> EV("근거 수집<br/>Builder 카탈로그 · 테이블 · 실행"):::builder
+    EV --> SC("비밀값 제거 후 LLM 호출<br/>system · evidence · question 분리"):::ext
+    SC --> GATE
+    subgraph GATE["응답 검증 4단계"]
         direction LR
-        G1[① 구조 검증<br/>Zod 스키마] --> G2[② 근거 대조<br/>없는 참조 · 동작 · SQL 제거]
-        G2 --> G3[③ Builder 검증<br/>/validate · /query]
-        G3 --> G4[④ 사용자 승인<br/>승인 전 실행 없음]
+        G1("<b>① 구조 검증</b><br/>Zod 스키마"):::studio --> G2("<b>② 근거 대조</b><br/>없는 참조 · 동작 · SQL 제거"):::studio
+        G2 --> G3("<b>③ Builder 검증</b><br/>/validate · /query"):::builder
+        G3 --> G4("<b>④ 사용자 승인</b><br/>승인 전 실행 없음"):::gold
     end
-    G4 --> OUT[답변 · 근거 · 제안 동작 표시]
+    GATE --> OUT(["답변 · 근거 · 제안 동작"]):::user
+    classDef user fill:#16233f,stroke:#16233f,color:#ffffff,font-weight:700
+    classDef studio fill:#eaf0fc,stroke:#2f55b5,color:#16233f
+    classDef builder fill:#e7f5f0,stroke:#2e8b6f,color:#12372c
+    classDef store fill:#fff4dc,stroke:#c98a1b,color:#4a3506
+    classDef ext fill:#f1f3f6,stroke:#8a94a6,color:#2c3442
+    classDef bronze fill:#f7e4d4,stroke:#b5713a,color:#4e2c10
+    classDef silver fill:#eceff3,stroke:#7d8794,color:#2c3442
+    classDef gold fill:#fdf1c4,stroke:#c49a17,color:#4a3a06
+    classDef bad fill:#fdecec,stroke:#c94a4a,color:#5a1a1a
+    classDef ok fill:#e7f5f0,stroke:#2e8b6f,color:#12372c
+    classDef head fill:#2f55b5,stroke:#2f55b5,color:#ffffff,font-weight:700

@@ -1,10 +1,16 @@
 sequenceDiagram
     autonumber
     actor U as 사용자
-    participant S as Studio
-    participant B as Builder API
-    participant K as kpubdata
-    participant P as 공공데이터 API
+    box rgb(234,240,252) Studio
+        participant S as Studio
+    end
+    box rgb(231,245,240) Builder
+        participant B as Builder API
+    end
+    box rgb(241,243,246) 외부
+        participant K as kpubdata
+        participant P as 공공데이터 API
+    end
     U->>S: 카탈로그에서 소스 선택, 규칙 입력
     S->>B: POST /preview · POST /validate
     B->>K: 샘플 조회
