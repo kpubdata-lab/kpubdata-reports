@@ -110,6 +110,23 @@ const scenes = {
     await recorder.stop();
   },
 
+  // O1: 서비스 둘러보기. 실행이 하나 끝난 뒤의 홈과 주요 메뉴를 차례로 연다.
+  async 'rec-08-overview'({ ui, page, recorder }) {
+    await page.goto(`${REAL}/`, { waitUntil: 'networkidle' });
+    await ui.sleep(1500);
+    await recorder.start(path.join(OUT, 'rec-08-overview.mp4'));
+    recorder.mark('home');
+    await ui.sleep(1600);
+    for (const name of ['카탈로그', '테이블', '갱신 이력', '품질', '모니터링']) {
+      recorder.mark(name);
+      await ui.click(page.locator('aside a, nav a', { hasText: name }).first(), { before: 150, after: 200 });
+      await page.waitForLoadState('networkidle');
+      await ui.sleep(1500);
+    }
+    recorder.mark('end');
+    await recorder.stop();
+  },
+
   // A1: 테이블 상세의 스냅샷.
   async 'rec-04-table'({ ui, page, recorder }) {
     await page.goto(`${REAL}/tables/datago-apt-trade`, { waitUntil: 'networkidle' });

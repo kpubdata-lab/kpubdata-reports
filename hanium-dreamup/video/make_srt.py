@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Writes the Korean .srt from render/src/timeline.ts (shot lengths), voice/lines.json and the
-synthesized line lengths (render/voice-manifest.json). Same timing as the burned-in subtitles."""
+"""Writes the Korean .srt from render/src/timeline.ts (shot lengths and caption margins) and
+captions.json. Same timing as the burned-in subtitles."""
 
 import json
 import re
@@ -9,10 +9,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 FPS = 30
 ts = (HERE / "render/src/timeline.ts").read_text(encoding="utf-8")
-offset = int(re.search(r"NARRATION_OFFSET = (\d+)", ts).group(1))
+cin = int(re.search(r"CAPTION_IN = (\d+)", ts).group(1))
+cout = int(re.search(r"CAPTION_OUT = (\d+)", ts).group(1))
 shots = re.findall(r"id: '(\w+)', dur: (\d+)", ts)
-lines = {l["shot"]: l["display"] for l in json.loads((HERE / "voice/lines.json").read_text(encoding="utf-8"))}
-dur = {s["shot"]: s["duration_s"] for s in json.loads((HERE / "render/voice-manifest.json").read_text(encoding="utf-8"))["shots"]}
+text = {c["shot"]: c["text"] for c in json.loads((HERE / "captions.json").read_text(encoding="utf-8"))}
 
 
 def stamp(frame: int) -> str:
@@ -22,9 +22,8 @@ def stamp(frame: int) -> str:
 
 t, n = 0, 0
 for sid, d in shots:
-    if sid in lines:
+    d = int(d)
+    if sid in text:
         n += 1
-        a = t + offset
-        b = a + round(dur[sid] * FPS) + 6
-        print(f"{n}\n{stamp(a)} --> {stamp(b)}\n{lines[sid]}\n")
-    t += int(d)
+        print(f"{n}\n{stamp(t + cin)} --> {stamp(t + d - cout)}\n{text[sid]}\n")
+    t += d
