@@ -1,6 +1,6 @@
-# KPubData reports
+# KPubData showcase
 
-KPubData Builder와 Studio에 관한 프로젝트 문서와 그 근거를 모아 둔 저장소입니다.
+KPubData Builder와 Studio의 공모전·프로그램 제출 자료(보고서, 설계서, 시연 영상)와 그 근거·제작 과정을 모아 둔 저장소입니다.
 
 ## 한이음 드림업 (26_HC277)
 
