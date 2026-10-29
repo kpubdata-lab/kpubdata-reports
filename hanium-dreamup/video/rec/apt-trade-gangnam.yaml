@@ -1,0 +1,86 @@
+# 시연 영상의 테이블 만들기 장면에서 위저드의 YAML 편집 모드로 적용하는 BuildSpec.
+# 조회 조건(LAWD_CD, DEAL_YMD)은 화면에서 입력하는 값과 같다.
+# 정규화 규칙은 kpubdata-builder specs/seoul-apartment-trades.yaml을 따른다.
+dataset_id: datago-apt-trade
+title: 아파트매매 실거래가
+description: 국토교통부 아파트 매매 실거래 자료. 서울 강남구, 2024년 9월 거래분.
+license: other
+license_name: 공공누리_1유형
+license_link: https://www.data.go.kr/data/15126468/openapi.do
+sources:
+  - provider: datago
+    dataset: apt_trade
+    params:
+      LAWD_CD: "11680"
+      DEAL_YMD: "202409"
+    schema:
+      required: [apartment, exclusive_area_m2, deal_amount_10k_krw, deal_date]
+      dtypes: {}
+      rename:
+        sggCd: district_code
+        umdNm: neighborhood
+        aptNm: apartment
+        excluUseAr: exclusive_area_m2
+        floor: floor
+        buildYear: build_year
+        dealYear: deal_year
+        dealMonth: deal_month
+        dealDay: deal_day
+        dealAmount: deal_amount_10k_krw
+        aptSeq: apartment_seq
+        # 개인정보 컬럼명 규칙(NM·NAME 포함)에 걸리지 않도록 도로명·중개사 컬럼 이름을 바꾼다.
+        estateAgentSggNm: agent_district
+        roadNm: road
+        roadNmBonbun: road_main_number
+        roadNmBubun: road_sub_number
+        roadNmCd: road_code
+        roadNmSeq: road_seq
+        roadNmSggCd: road_district_code
+        roadNmbCd: road_ground_code
+      casts:
+        district_code: str
+        neighborhood: str
+        apartment: str
+        exclusive_area_m2: float
+        floor: int
+        build_year: int
+        deal_year: int
+        deal_month: int
+        deal_day: int
+        deal_amount_10k_krw: int_comma
+        apartment_seq: str
+      derived:
+        - name: deal_date
+          kind: date_parts
+          columns: [deal_year, deal_month, deal_day]
+    gold:
+      select:
+        - district_code
+        - neighborhood
+        - apartment
+        - exclusive_area_m2
+        - floor
+        - build_year
+        - deal_amount_10k_krw
+        - deal_date
+        - apartment_seq
+quality:
+  min_rows: 100
+  max_duplicate_rate: 0.01
+  max_null_ratio:
+    deal_amount_10k_krw: 0
+  range:
+    - column: exclusive_area_m2
+      min: 0
+      max: 400
+pii:
+  mode: block
+exports:
+  - kind: parquet
+    output_path: artifacts/builds/datago-apt-trade/data.parquet
+    options: {}
+  - kind: huggingface
+    output_path: artifacts/builds/datago-apt-trade/hf
+    options: {}
+# Studio는 YAML 적용 시 metadata 키를 기대한다(없으면 applyBuildSpecToDraft가 실패).
+metadata: {}
