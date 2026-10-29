@@ -1,7 +1,6 @@
 import React from 'react';
 import {
 	AbsoluteFill,
-	Audio,
 	Freeze,
 	Img,
 	interpolate,
@@ -11,9 +10,8 @@ import {
 	useCurrentFrame,
 } from 'remotion';
 import {C, MONO, SANS, ease} from './theme';
-import {Key, NARRATION_OFFSET, Segment, SHOTS, Shot, starts, TOTAL} from './timeline';
-import lines from '../../voice/lines.json';
-import voice from '../voice-manifest.json';
+import {CAPTION_IN, CAPTION_OUT, Key, Segment, SHOTS, Shot, starts, ZOOM_DAMP} from './timeline';
+import captions from '../../captions.json';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const fadeIn = (f: number, from: number, len = 10) => ease((f - from) / len);
@@ -51,7 +49,7 @@ const TitleCard: React.FC<{dur: number; end?: boolean}> = ({dur, end}) => {
 						KPubData <span style={{color: C.slate, fontWeight: 500, fontSize: 34}}>Builder · Studio</span>
 					</div>
 					<div style={{...rise(f, 32, 16, 8), position: 'absolute', bottom: 54, fontSize: 24, color: C.slate}}>
-						내레이션: AI 합성 음성 · 배경음: 직접 합성 · 화면: 실제 실행 녹화(AI 도우미 장면은 데모 모드)
+						화면: 실제 실행 녹화 · AI 도우미 장면은 데모 모드 · 음성·음향 없음
 					</div>
 				</>
 			) : null}
@@ -221,7 +219,7 @@ const Pipeline: React.FC = () => {
 
 /* ---------- 녹화 화면: 창 모형 + 확대 + 배속 표시 ---------- */
 
-const MOCK = {x: 360, y: 140, w: 1200, bar: 38};
+const MOCK = {x: 288, y: 78, w: 1344, bar: 30};
 const CONTENT_H = (MOCK.w * 900) / 1440;
 
 const cameraAt = (keys: Key[], f: number) => {
@@ -294,7 +292,8 @@ const SpeedBadge: React.FC<{segments: Segment[]; dur: number}> = ({segments, dur
 
 const Proof: React.FC<{shot: Extract<Shot, {kind: 'proof'}>; prevKicker?: string}> = ({shot, prevKicker}) => {
 	const f = useCurrentFrame();
-	const cam = cameraAt(shot.camera, f);
+	const raw = cameraAt(shot.camera, f);
+	const cam = {...raw, z: 1 + (raw.z - 1) * ZOOM_DAMP};
 	const W = MOCK.w;
 	const H = CONTENT_H;
 	const tx = Math.min(0, Math.max(W - W * cam.z, W / 2 - cam.x * W * cam.z));
@@ -303,23 +302,23 @@ const Proof: React.FC<{shot: Extract<Shot, {kind: 'proof'}>; prevKicker?: string
 	const head = newSection ? rise(f, 0, 12, 14) : {opacity: 1};
 	return (
 		<AbsoluteFill style={{background: C.bg, fontFamily: SANS}}>
-			<div style={{position: 'absolute', left: MOCK.x, top: 44, right: MOCK.x, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between'}}>
-				<div>
-					<div style={{fontSize: 24, fontWeight: 700, color: C.slate, ...head}}>{shot.kicker}</div>
-					<div style={{fontSize: 44, fontWeight: 800, color: C.ink, marginTop: 4, ...rise(f, 0, 12, 12)}}>{shot.heading}</div>
+			<div style={{position: 'absolute', left: MOCK.x, top: 14, right: MOCK.x, height: 54, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+				<div style={{display: 'flex', alignItems: 'baseline', gap: 18}}>
+					<div style={{fontSize: 26, fontWeight: 700, color: C.slate, ...head}}>{shot.kicker}</div>
+					<div style={{fontSize: 38, fontWeight: 800, color: C.ink, ...rise(f, 0, 12, 10)}}>{shot.heading}</div>
 				</div>
 				{shot.chip ? (
-					<div style={{marginBottom: 6, padding: '8px 18px', borderRadius: 999, fontSize: 22, fontWeight: 700, color: shot.chip.tone === 'demo' ? C.warning : C.slate, background: shot.chip.tone === 'demo' ? '#FEF3E2' : C.muted, border: `1.5px solid ${shot.chip.tone === 'demo' ? '#F5C98B' : C.border}`}}>
+					<div style={{padding: '6px 16px', borderRadius: 999, fontSize: 20, fontWeight: 700, color: shot.chip.tone === 'demo' ? C.warning : C.slate, background: shot.chip.tone === 'demo' ? '#FEF3E2' : C.muted, border: `1.5px solid ${shot.chip.tone === 'demo' ? '#F5C98B' : C.border}`}}>
 						{shot.chip.text}
 					</div>
 				) : null}
 			</div>
-			<div style={{position: 'absolute', left: MOCK.x, top: MOCK.y, width: W, height: H + MOCK.bar, borderRadius: 18, overflow: 'hidden', border: `1.5px solid ${C.border}`, boxShadow: '0 18px 48px rgba(23,32,51,0.10)', background: C.bg}}>
+			<div style={{position: 'absolute', left: MOCK.x, top: MOCK.y, width: W, height: H + MOCK.bar, borderRadius: 18, overflow: 'hidden', border: `1.5px solid ${C.border}`, boxShadow: '0 10px 32px rgba(23,32,51,0.10)', background: C.bg}}>
 				<div style={{height: MOCK.bar, background: C.muted, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', padding: '0 16px', gap: 8}}>
 					{[0, 1, 2].map((i) => (
-						<div key={i} style={{width: 12, height: 12, borderRadius: 6, background: '#D5D9D2'}} />
+						<div key={i} style={{width: 11, height: 11, borderRadius: 6, background: '#D5D9D2'}} />
 					))}
-					<div style={{flex: 1, textAlign: 'center', fontSize: 18, color: C.slate, fontWeight: 600, marginRight: 52}}>KPubData Studio</div>
+					<div style={{flex: 1, textAlign: 'center', fontSize: 16, color: C.slate, fontWeight: 600, marginRight: 52}}>KPubData Studio</div>
 				</div>
 				<div style={{position: 'relative', width: W, height: H, overflow: 'hidden'}}>
 					<div style={{position: 'absolute', left: 0, top: 0, width: W, height: H, transformOrigin: '0 0', transform: `translate(${tx}px, ${ty}px) scale(${cam.z})`}}>
@@ -351,43 +350,21 @@ const Recap: React.FC = () => {
 	);
 };
 
-/* ---------- 자막 ---------- */
+/* ---------- 자막: 설명은 모두 자막으로 한다(음성·음향 없음). ---------- */
 
 const Subtitle: React.FC<{text: string; len: number}> = ({text, len}) => {
 	const f = useCurrentFrame();
-	const o = Math.min(fadeIn(f, 0, 5), interpolate(f, [len - 5, len], [1, 0], clamp));
+	const o = Math.min(fadeIn(f, 0, 6), interpolate(f, [len - 6, len], [1, 0], clamp));
 	return (
-		<div style={{position: 'absolute', bottom: 34, left: 0, right: 0, display: 'flex', justifyContent: 'center', opacity: o}}>
-			<div style={{maxWidth: 1500, padding: '10px 26px', borderRadius: 14, background: 'rgba(23,32,51,0.84)', color: '#fff', fontFamily: SANS, fontSize: 36, fontWeight: 600, lineHeight: 1.4, textAlign: 'center', wordBreak: 'keep-all'}}>
+		<div style={{position: 'absolute', top: 960, bottom: 8, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: o}}>
+			<div style={{maxWidth: 1500, padding: '8px 28px', borderRadius: 14, background: 'rgba(23,32,51,0.88)', color: '#fff', fontFamily: SANS, fontSize: 33, fontWeight: 600, lineHeight: 1.38, textAlign: 'center', wordBreak: 'keep-all'}}>
 				{text}
 			</div>
 		</div>
 	);
 };
 
-/* ---------- 전체 ---------- */
-
-const durationOf: Record<string, number> = Object.fromEntries(
-	(voice as {shots: {shot: string; duration_s: number}[]}).shots.map((s) => [s.shot, s.duration_s]),
-);
-const displayOf: Record<string, string> = Object.fromEntries((lines as {shot: string; display: string}[]).map((l) => [l.shot, l.display]));
-
-/** 배경음: 내레이션 구간에서 낮춘다(앞뒤 8프레임 경사). */
-const musicVolume = (frame: number) => {
-	let duck = 0;
-	SHOTS.forEach((s, i) => {
-		const d = durationOf[s.id];
-		if (!d) return;
-		const a = starts[i] + NARRATION_OFFSET;
-		const b = a + Math.round(d * 30);
-		const v = Math.min((frame - (a - 8)) / 8, (b + 8 - frame) / 8);
-		duck = Math.max(duck, Math.min(1, Math.max(0, v)));
-	});
-	const full = 0.5;
-	const ducked = 0.16;
-	const fade = Math.min(1, frame / 20, (TOTAL - frame) / 45);
-	return (full + (ducked - full) * duck) * Math.max(0, fade);
-};
+const captionOf: Record<string, string> = Object.fromEntries((captions as {shot: string; text: string}[]).map((c) => [c.shot, c.text]));
 
 export const Video: React.FC = () => (
 	<AbsoluteFill style={{background: C.bg}}>
@@ -428,13 +405,11 @@ export const Video: React.FC = () => (
 			);
 		})}
 		{SHOTS.map((s, i) =>
-			durationOf[s.id] ? (
-				<Sequence key={`${s.id}-voice`} name={`${s.id} voice`} from={starts[i] + NARRATION_OFFSET} durationInFrames={Math.round(durationOf[s.id] * 30) + 6}>
-					<Audio src={staticFile(`voice/${s.id}.wav`)} />
-					<Subtitle text={displayOf[s.id]} len={Math.round(durationOf[s.id] * 30) + 6} />
+			captionOf[s.id] ? (
+				<Sequence key={`${s.id}-caption`} name={`${s.id} caption`} from={starts[i] + CAPTION_IN} durationInFrames={s.dur - CAPTION_IN - CAPTION_OUT}>
+					<Subtitle text={captionOf[s.id]} len={s.dur - CAPTION_IN - CAPTION_OUT} />
 				</Sequence>
 			) : null,
 		)}
-		<Audio src={staticFile('music/bed.wav')} volume={musicVolume} />
 	</AbsoluteFill>
 );

@@ -1,5 +1,5 @@
 /**
- * 콘티(video-storyboard.md §3)를 프레임 단위로 옮긴 타임라인. 30 fps, 샷 경계는 2초(60프레임) 마디 위.
+ * 콘티(video-storyboard.md §3)를 프레임 단위로 옮긴 타임라인. 30 fps. 소리 없이 자막으로 설명한다.
  * 녹화 구간 시각(초)은 rec/record.cjs가 남긴 *.marks.json을 보고 정했다.
  */
 export type Key = {at: number; z: number; x: number; y: number};
@@ -23,10 +23,15 @@ const REAL = {text: '실제 Builder 연동 · 공공데이터포털 API', tone: 
 
 export const SHOTS: Shot[] = [
 	{id: 'T1', dur: 120, kind: 'title'},
-	{id: 'Q1', dur: 240, kind: 'problem1'},
+	{id: 'Q1', dur: 180, kind: 'problem1'},
 	{id: 'Q2', dur: 120, kind: 'problem2'},
 	{id: 'B1', dur: 180, kind: 'brand'},
 	{id: 'B2', dur: 180, kind: 'pipeline'},
+	{
+		id: 'O1', dur: 210, kind: 'proof', kicker: '서비스 둘러보기', heading: 'KPubData Studio', chip: REAL,
+		segments: [{src: 'rec-08-overview.mp4', from: 0.7, to: 14.3, rate: 1.95}],
+		camera: [{at: 0, z: 1, x: 0.5, y: 0.5}],
+	},
 	{
 		id: 'D1', dur: 120, kind: 'proof', kicker: '01 · 찾기', heading: '카탈로그에서 찾고, 바로 시작.', chip: REAL,
 		segments: [{src: 'rec-01-catalog.mp4', from: 0.6, to: 6.9, rate: 1.6}],
@@ -68,13 +73,13 @@ export const SHOTS: Shot[] = [
 		],
 	},
 	{
-		id: 'R1', dur: 240, kind: 'proof', kicker: '03 · 실행', heading: '원본은 그대로, 정제는 규칙대로.', chip: REAL,
-		segments: [{src: 'rec-03-preview-run.mp4', from: 12.6, to: 18.3, rate: 1, hold: 69}],
+		id: 'R1', dur: 180, kind: 'proof', kicker: '03 · 실행', heading: '원본은 그대로, 정제는 규칙대로.', chip: REAL,
+		segments: [{src: 'rec-03-preview-run.mp4', from: 12.6, to: 18.3, rate: 1, hold: 9}],
 		camera: [
 			{at: 0, z: 1, x: 0.5, y: 0.5},
 			{at: 50, z: 1, x: 0.5, y: 0.5},
 			{at: 90, z: 1.55, x: 0.43, y: 0.56},
-			{at: 240, z: 1.6, x: 0.43, y: 0.56},
+			{at: 180, z: 1.6, x: 0.43, y: 0.56},
 		],
 	},
 	{
@@ -135,8 +140,8 @@ export const SHOTS: Shot[] = [
 			{at: 180, z: 1.25, x: 0.5, y: 0.6},
 		],
 	},
-	{id: 'F1', dur: 120, kind: 'recap'},
-	{id: 'F2', dur: 120, kind: 'end'},
+	{id: 'F1', dur: 90, kind: 'recap'},
+	{id: 'F2', dur: 90, kind: 'end'},
 ];
 
 export const starts = (() => {
@@ -150,5 +155,8 @@ export const starts = (() => {
 
 export const TOTAL = SHOTS.reduce((a, s) => a + s.dur, 0);
 
-/** 샷 시작 후 내레이션이 들어가는 프레임. */
-export const NARRATION_OFFSET = 8;
+/** 자막은 샷 시작 CAPTION_IN 프레임 뒤에 나타나 샷 끝 CAPTION_OUT 프레임 전에 사라진다. */
+export const CAPTION_IN = 6;
+export const CAPTION_OUT = 4;
+/** 확대를 줄여 서비스 화면이 거의 다 보이게 한다: 실제 배율 = 1 + (z - 1) × ZOOM_DAMP. */
+export const ZOOM_DAMP = 0.4;
